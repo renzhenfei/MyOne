@@ -1,0 +1,72 @@
+//
+//  MyNote.pch
+//  MyOne
+//
+//  Created by zhenfei ren on 2019/1/23.
+//  Copyright © 2019 zhenfei ren. All rights reserved.
+//
+
+#ifndef MyNote_pch
+#define MyNote_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+#pragma mark - header
+#import "MLBMacros.h"
+#import "Constants.h"
+
+#pragma mark - catrgories
+#import "NSString+MLBUtilities.h"
+#import "MLBUtilities.h"
+#import <Masonry/Masonry.h>
+
+#import <CocoaLumberjack/CocoaLumberjack.h>
+static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
+
+#import <SDWebImage/UIImageView+WebCache.h>
+#import "UIColor+MLBUtilities.h"
+#import <JTSImageViewController.h>
+
+#import "MLBApiConstants.h"
+#import "UIView+MLBShowHUD.h"
+#import "UIImageView+MLBSDImageLoader.h"
+
+#import <GMCPagingScrollView/GMCPagingScrollView.h>
+#import "AAPullToRefresh.h"
+#import "MLBUIFactory.h"
+#import <ZYCornerRadius/UIImageView+CornerRadius.h>
+
+#pragma mark - NSEnum
+
+typedef NS_ENUM(NSUInteger, MLBActionType) {
+    MLBActionTypeDiary,
+    MLBActionTypePraise,
+    MLBActionTypeMore,
+};
+
+typedef NS_ENUM(NSUInteger, MLBReadType) {
+    MLBReadTypeEssay,
+    MLBReadTypeSerial,
+    MLBReadTypeQuestion,
+};
+
+typedef NS_ENUM(NSUInteger, MLBUserType) {
+    MLBUserTypeMe,
+    MLBUserTypeOthers,
+};
+
+typedef NS_ENUM(NSUInteger, MLBSearchType) {
+    MLBSearchTypeHome,
+    MLBSearchTypeRead,
+    MLBSearchTypeMusic,
+    MLBSearchTypeMovie,
+    MLBSearchTypeAuthor,
+};
+
+typedef NS_ENUM(NSUInteger, MLBMusicDetailsType) {
+    MLBMusicDetailsTypeNone,
+    MLBMusicDetailsTypeStory,
+    MLBMusicDetailsTypeLyric,
+    MLBMusicDetailsTypeInfo,
+};
+#endif /* MyNote_pch */
