@@ -1,11 +1,9 @@
 package com.example.administrator.one
 
-import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
-import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -13,22 +11,32 @@ class MainActivity : AppCompatActivity() {
                 message.setText(R.string.title_home)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_dashboard -> {
-                message.setText(R.string.title_dashboard)
+            R.id.navigation_read -> {
+                message.setText(R.string.title_read)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_notifications -> {
-                message.setText(R.string.title_notifications)
+            R.id.navigation_music -> {
+                message.setText(R.string.title_music)
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.navigation_movie -> {
+                message.setText(R.string.title_movie)
                 return@OnNavigationItemSelectedListener true
             }
         }
         false
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    override fun getLayoutId(): Int {
+        return R.layout.activity_main
+    }
 
+    override fun initData() {
+
+    }
+
+    override fun initView() {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
+
 }
