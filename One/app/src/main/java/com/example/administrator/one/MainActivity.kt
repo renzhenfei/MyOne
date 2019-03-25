@@ -1,6 +1,15 @@
 package com.example.administrator.one
 
 import android.support.design.widget.BottomNavigationView
+import com.example.administrator.one.common.api.API
+import com.example.administrator.one.common.api.ApiUrl
+import com.trello.rxlifecycle2.android.ActivityEvent
+import io.reactivex.Observable
+import io.reactivex.Observer
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity() {
@@ -32,7 +41,27 @@ class MainActivity : BaseActivity() {
     }
 
     override fun initData() {
+        API.retrofit?.create(ApiUrl::class.java)
+                ?.getRetrofit()
+                //绑定线程
+                ?.subscribeOn(Schedulers.io())
+                ?.observeOn(AndroidSchedulers.mainThread())
+                //绑定生命周期
+                ?.compose(bindUntilEvent(ActivityEvent.DESTROY))
+                ?.subscribe(object : Observer<Any> {
+                    override fun onComplete() {
+                    }
 
+                    override fun onSubscribe(d: Disposable) {
+                    }
+
+                    override fun onNext(t: Any) {
+                    }
+
+                    override fun onError(e: Throwable) {
+                    }
+
+                })
     }
 
     override fun initView() {
