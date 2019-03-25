@@ -20,6 +20,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
 }
 
 dependencies {
@@ -40,4 +44,5 @@ dependencies {
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.46'
     implementation 'com.youth.banner:banner:1.4.10'
     implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
+    implementation 'com.gyf.immersionbar:immersionbar:2.3.3'
 }

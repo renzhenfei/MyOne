@@ -1,10 +1,10 @@
-package com.example.administrator.one.movie
+package com.example.administrator.one.music
 
 import android.view.View
 import com.example.administrator.one.BaseFragment
 import com.example.administrator.one.R
 
-class MovieFragment : BaseFragment() {
+class MusicFragment : BaseFragment() {
     override fun initView(rootView: View) {
 
     }
@@ -14,6 +14,6 @@ class MovieFragment : BaseFragment() {
     }
 
     override fun getLayoutId(): Int {
-        return R.layout.fragment_movie
+        return R.layout.fragment_music
     }
 }

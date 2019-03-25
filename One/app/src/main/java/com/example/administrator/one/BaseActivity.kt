@@ -1,6 +1,7 @@
 package com.example.administrator.one
 
 import android.os.Bundle
+import com.gyf.barlibrary.ImmersionBar
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
 
 abstract class BaseActivity : RxAppCompatActivity() {
@@ -8,6 +9,7 @@ abstract class BaseActivity : RxAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(getLayoutId())
+        ImmersionBar.with(this).statusBarDarkFont(true).init()
         initView()
         initData()
     }
