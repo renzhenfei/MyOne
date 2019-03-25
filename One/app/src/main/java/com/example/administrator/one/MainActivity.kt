@@ -3,6 +3,7 @@ package com.example.administrator.one
 import android.support.design.widget.BottomNavigationView
 import com.example.administrator.one.common.api.API
 import com.example.administrator.one.common.api.ApiUrl
+import com.example.administrator.one.common.api.BaseObserver
 import com.trello.rxlifecycle2.android.ActivityEvent
 import io.reactivex.Observable
 import io.reactivex.Observer
@@ -48,17 +49,13 @@ class MainActivity : BaseActivity() {
                 ?.observeOn(AndroidSchedulers.mainThread())
                 //绑定生命周期
                 ?.compose(bindUntilEvent(ActivityEvent.DESTROY))
-                ?.subscribe(object : Observer<Any> {
-                    override fun onComplete() {
+                ?.subscribe(object : BaseObserver<Any>() {
+                    override fun onFailure(code: Int?) {
+
                     }
 
-                    override fun onSubscribe(d: Disposable) {
-                    }
+                    override fun onSuccess(data: Any?) {
 
-                    override fun onNext(t: Any) {
-                    }
-
-                    override fun onError(e: Throwable) {
                     }
 
                 })
