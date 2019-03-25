@@ -7,7 +7,6 @@
 //
 
 #import "MLBReadDetailsViewController.h"
-#import "MLBBaseModel.h"
 #import "MLBReadEssay.h"
 #import "MLBReadSerial.h"
 #import "MLBReadQuestion.h"

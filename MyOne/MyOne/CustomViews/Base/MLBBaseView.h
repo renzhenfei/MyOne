@@ -11,7 +11,7 @@
 
 @interface MLBBaseView : UIView
 
-@property(nonatomic,strong) MLBBaseViewController *parentViewController;
+@property(nonatomic,weak) MLBBaseViewController *parentViewController;
 
 @property(nonatomic,assign) NSInteger viewIndex;
 
