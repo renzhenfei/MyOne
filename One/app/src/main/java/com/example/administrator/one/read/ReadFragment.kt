@@ -5,6 +5,14 @@ import com.example.administrator.one.BaseFragment
 import com.example.administrator.one.R
 
 class ReadFragment : BaseFragment() {
+
+    companion object {
+        val TAG = this::class.java.name
+        fun newInstance():ReadFragment{
+            return ReadFragment()
+        }
+    }
+
     override fun initView(rootView: View) {
 
     }

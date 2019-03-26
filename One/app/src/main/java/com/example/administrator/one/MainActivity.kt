@@ -7,34 +7,75 @@ import android.view.View
 import com.example.administrator.one.common.api.API
 import com.example.administrator.one.common.api.ApiUrl
 import com.example.administrator.one.common.api.BaseObserver
+import com.example.administrator.one.home.HomeFragment
+import com.example.administrator.one.movie.MovieFragment
+import com.example.administrator.one.music.MusicFragment
+import com.example.administrator.one.read.ReadFragment
 import com.example.administrator.one.util.SelectorUtil
 import com.trello.rxlifecycle2.android.ActivityEvent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 
+enum class PageType {
+    HOME, READ, MUSIC, MOVIE
+}
+
 class MainActivity : BaseActivity() {
+
+    private var mCurrentFragment: BaseFragment? = null
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
-                message.setText(R.string.title_home)
+                switchFragment(PageType.HOME)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_read -> {
-                message.setText(R.string.title_read)
+                switchFragment(PageType.READ)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_music -> {
-                message.setText(R.string.title_music)
+                switchFragment(PageType.MUSIC)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_movie -> {
-                message.setText(R.string.title_movie)
+                switchFragment(PageType.MOVIE)
                 return@OnNavigationItemSelectedListener true
             }
         }
         false
+    }
+
+    private fun switchFragment(type: PageType) {
+        val transaction = supportFragmentManager.beginTransaction()
+        val newTag: String = when (type) {
+            PageType.HOME -> HomeFragment.TAG
+            PageType.READ -> ReadFragment.TAG
+            PageType.MUSIC -> MusicFragment.TAG
+            PageType.MOVIE -> MovieFragment.TAG
+        }
+        var newFragment= supportFragmentManager.findFragmentByTag(newTag)
+
+        if (mCurrentFragment != null) {
+            if (mCurrentFragment!! == newFragment ) {
+                //点击的同一个 可进行刷新页面处理
+            } else {
+                transaction.hide(mCurrentFragment!!)
+                if (newFragment == null) {
+                    newFragment = newFragment(type)
+                    transaction.add(newFragment, newTag)
+                } else {
+                    transaction.show(newFragment)
+                }
+            }
+        } else {
+            //第一次进来 newFragment也应该是null
+            newFragment = newFragment(type)
+            transaction.add(newFragment,newTag)
+        }
+        transaction.commit()
+        mCurrentFragment = newFragment as BaseFragment
     }
 
     override fun getLayoutId(): Int {
@@ -63,17 +104,26 @@ class MainActivity : BaseActivity() {
 
     override fun initView() {
         val actionBarView = View.inflate(this, R.layout.action_bar_content_view, null)
-        val layoutP : ActionBar.LayoutParams = ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT,ActionBar.LayoutParams.MATCH_PARENT)
-        supportActionBar?.setCustomView(actionBarView,layoutP)
+        val layoutP: ActionBar.LayoutParams = ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT)
+        supportActionBar?.setCustomView(actionBarView, layoutP)
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar?.setDisplayShowCustomEnabled(true)
-        if(Build.VERSION.SDK_INT>=21){
+        if (Build.VERSION.SDK_INT >= 21) {
             supportActionBar?.elevation = 0f
         }
         val colorStateList = SelectorUtil.generateColorStateList(this, R.color.text_color_normal, R.color.text_color_checked)
         navigation.itemTextColor = colorStateList
         navigation.itemIconTintList = colorStateList
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+    }
+
+    private fun newFragment(pageType: PageType):BaseFragment{
+        return when (pageType) {
+            PageType.HOME -> HomeFragment.newInstance()
+            PageType.READ -> ReadFragment.newInstance()
+            PageType.MUSIC -> MusicFragment.newInstance()
+            PageType.MOVIE -> MovieFragment.newInstance()
+        }
     }
 
 }

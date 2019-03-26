@@ -23,8 +23,8 @@ abstract class BaseFragment : RxFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        initData()
         retainInstance = true
+        initData()
     }
 
     protected fun showProgress() {
@@ -41,4 +41,8 @@ abstract class BaseFragment : RxFragment() {
     abstract fun initView(rootView: View)
 
     abstract fun initData()
+
+    fun getTAG(): String {
+        return BaseFragment::class.java.name
+    }
 }

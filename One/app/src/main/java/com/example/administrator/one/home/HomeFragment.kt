@@ -8,6 +8,13 @@ import kotlinx.android.synthetic.main.fragment_home.view.*
 
 class HomeFragment : BaseFragment() {
 
+    companion object {
+        val TAG = this::class.java.name
+        fun newInstance(): HomeFragment {
+            return HomeFragment()
+        }
+    }
+
     override fun initView(rootView: View) {
         rootView.banner.setImages(mutableListOf<String>()).setImageLoader(GlideImageLoader())
     }
