@@ -11,7 +11,7 @@
 @implementation UIImageView (MLBSDImageLoader)
 
 -(void)mlb_sd_setImageWithURL:(NSString *)url placeholderImageName:(NSString *)placeHolderImageName{
-    
+    [self mlb_sd_setImageWithURL:url placeholderImageName:placeHolderImageName cachePlaceholderImage:YES];
 }
 
 -(void)mlb_sd_setImageWithURL:(NSString *)url placeholderImageName:(NSString *)placeHolderImageName cachePlaceholderImage:(BOOL)cachePlaceholderImage{
