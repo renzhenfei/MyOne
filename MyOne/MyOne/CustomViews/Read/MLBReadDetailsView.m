@@ -68,6 +68,8 @@ NSString *const KMLReadDetailsID = @"KMLReadDetailsID";
 
 @property (strong, nonatomic) NSOperationQueue *operationQueue;
 @property (assign, nonatomic) BOOL showBottomBar;
+
+@property (strong,nonatomic) NSMutableDictionary *sectionIndex;
 @end
 
 @implementation MLBReadDetailsView
@@ -101,6 +103,13 @@ NSString *const KMLReadDetailsID = @"KMLReadDetailsID";
 
 #pragma mark - Getter Method
 
+- (NSDictionary *)sectionIndex{
+    if (!_sectionIndex) {
+        _sectionIndex = [NSMutableDictionary dictionary];
+    }
+    return _sectionIndex;
+}
+
 - (MLBSerialCollectionView *)serialCollectionView{
     if (_serialCollectionView) {
         return _serialCollectionView;
@@ -131,12 +140,11 @@ NSString *const KMLReadDetailsID = @"KMLReadDetailsID";
     if (!_readDetailsModel) {
         return 0;
     }
-    
-    return 4; // 内容 + 推荐 + 热门评论 + 普通评论
+    return self.relatedList.count > 0 ? 4 : 3; // 内容 + 推荐 + 热门评论 + 普通评论
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (self.viewType == 0) {
+    if (section == 0) {
         switch (self.viewType) {
             case MLBReadTypeEssay:
             case MLBReadTypeSerial:
@@ -146,15 +154,32 @@ NSString *const KMLReadDetailsID = @"KMLReadDetailsID";
                 return 3;// 问题 + 回答作者及时间 + 回答内容
                 break;
         }
-    }else if (self.viewType == 1 && self.relatedList){
-        return self.relatedList.count;
-    }else if (self.viewType == 2 && self.commentList){
-        return self.commentList.hotComments.count;
-    }else if (self.viewType == 3 && self.commentList){
-        return self.commentList.comments.count;
-    }else{
-        return 0;
     }
+    if (self.relatedList && self.relatedList.count > 0) {
+        if (section == 1) {
+            return self.relatedList.count;
+        }else if (section == 2){
+            return self.commentList.hotComments.count;
+        }else if (section == 3){
+            return self.commentList.comments.count;
+        }
+    }else{
+        if (section == 1) {
+            return self.commentList.hotComments.count;
+        }else if (section == 2){
+            return self.commentList.comments.count;
+        }
+    }
+//    else if (self.viewType == 1 && self.relatedList && self.relatedList.count > 0){
+//        return self.relatedList.count;
+//    }else if (self.viewType == 2 && self.commentList){
+//        return self.commentList.hotComments.count;
+//    }else if (self.viewType == 3 && self.commentList){
+//        return self.commentList.comments.count;
+//    }else{
+//        return 0;
+//    }
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -211,19 +236,17 @@ NSString *const KMLReadDetailsID = @"KMLReadDetailsID";
             }
             break;
     }
-    if (indexPath.section == 1) {
+    if (indexPath.section == 1 && self.relatedList.count > 0) {
         MLBReadBaseCell *cell = [tableView dequeueReusableCellWithIdentifier:KMLReadBaseCellID forIndexPath:indexPath];
-        if (indexPath.row < self.relatedList.count) {
-            [cell configureCellWithBaseModel:self.relatedList[indexPath.row]];
-        }
+        [cell configureCellWithBaseModel:self.relatedList[indexPath.row]];
         return cell;
-    }else if (indexPath.section == 2 || indexPath.section == 3){
+    }else if (((indexPath.section == 2 || indexPath.section == 3) && self.relatedList.count > 0) || ((indexPath.section == 1 || indexPath.section ==  2) && self.relatedList.count == 0)){
         MLBCommentCell *cell = [tableView dequeueReusableCellWithIdentifier:KMLCommentCellID forIndexPath:indexPath];
         [cell configureCellForCommonWithComment:[self commentAtIndexPath:indexPath] atIndexPath:indexPath];
         if (!cell.cellButtonClicked) {
             __weak typeof(self) weakSelf = self;
             cell.cellButtonClicked = ^(MLBCommentCellButtonType type, NSIndexPath *indexPath) {
-              __strong typeof(weakSelf) strongSelf = weakSelf;
+                __strong typeof(weakSelf) strongSelf = weakSelf;
                 [strongSelf commentCellButtonClickedWithType:type indexPath:indexPath];
             };
         }
@@ -235,9 +258,9 @@ NSString *const KMLReadDetailsID = @"KMLReadDetailsID";
 #pragma mark UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    if (section == 1 && _relatedList && _relatedList.count > 0) { // 相关推荐
+    if (self.relatedList.count > 0 && section == 1 && _relatedList && _relatedList.count > 0) { // 相关推荐
         return [MLBCommonHeaderFooterView viewHeight];
-    } else if (section == 2 && [self hasComments]) { // 评论列表
+    } else if (section == (self.relatedList.count > 0 ? 2 : 1) && [self hasComments]) { // 评论列表
         return [MLBCommonHeaderFooterView viewHeight];
     }
     
@@ -245,7 +268,7 @@ NSString *const KMLReadDetailsID = @"KMLReadDetailsID";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    if (section == 2 && _commentList && _commentList.hotComments.count > 0) { // 以上是热门评论
+    if (section == self.relatedList.count > 0 ? 2 : 1 && _commentList && _commentList.hotComments.count > 0) { // 以上是热门评论
         return [MLBCommonHeaderFooterView viewHeight];
     }
     
@@ -318,8 +341,8 @@ NSString *const KMLReadDetailsID = @"KMLReadDetailsID";
         }
             break;
     }
-    
-    if (indexPath.section == 1) {
+    //推荐
+    if (indexPath.section == 1 && self.relatedList.count > 0) {
         __weak typeof(self) weakSelf = self;
         return [tableView fd_heightForCellWithIdentifier:KMLReadBaseCellID cacheByIndexPath:indexPath configuration:^(MLBReadBaseCell *cell) {
             __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -327,7 +350,7 @@ NSString *const KMLReadDetailsID = @"KMLReadDetailsID";
                 [cell configureCellWithBaseModel:strongSelf.relatedList[indexPath.row]];
             }
         }];
-    } else if (indexPath.section == 2 || indexPath.section == 3) {
+    } else if (((indexPath.section == 2 || indexPath.section == 3) && self.relatedList.count > 0) || ((indexPath.section == 1 || indexPath.section == 2) && self.relatedList.count == 0)) {
         __weak typeof(self) weakSelf = self;
         return [tableView fd_heightForCellWithIdentifier:KMLCommentCellID cacheByIndexPath:indexPath configuration:^(MLBCommentCell *cell) {
             __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -344,7 +367,7 @@ NSString *const KMLReadDetailsID = @"KMLReadDetailsID";
         view.viewType = MLBCommonHeaderFooterViewTypeRelatedRec;
         
         return view;
-    } else if (section == 2 && [self hasComments]) { // 评论列表
+    } else if (section == self.relatedList.count > 0 ? 2 : 1 && [self hasComments]) { // 评论列表
         MLBCommonHeaderFooterView *view = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kMLBCommonHeaderFooterViewIDForTypeHeader];
         view.viewType = MLBCommonHeaderFooterViewTypeComment;
         
@@ -355,7 +378,7 @@ NSString *const KMLReadDetailsID = @"KMLReadDetailsID";
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    if (section == 2 && _commentList && _commentList.hotComments.count > 0) { // 以上是热门评论
+    if (section == (self.relatedList.count > 0 ? 2 : 1) && _commentList && _commentList.hotComments.count > 0) { // 以上是热门评论
         MLBCommonHeaderFooterView *view = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kMLBCommonHeaderFooterViewIDForTypeHeader];
         view.viewType = MLBCommonHeaderFooterViewTypeAboveIsHotComments;
         
@@ -403,9 +426,9 @@ NSString *const KMLReadDetailsID = @"KMLReadDetailsID";
         [tableView registerClass:[MLBReadDetailsQuestionTitleCell class] forCellReuseIdentifier:KMLReadDetailsQuestionTitleCellID];
         [tableView registerClass:[MLBReadDetailsQuestionAnswerCell class] forCellReuseIdentifier:KMLReadDetailsQuestionAnswerCellID];
         tableView.tableFooterView = [UIView new];
-        tableView.contentInset = UIEdgeInsetsMake(0, 0, 44, 0);
+        tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
         tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, 44, 0);
+        tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, 0, 0);
         tableView.showsVerticalScrollIndicator = NO;
         [self addSubview:tableView];
         [tableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -460,7 +483,7 @@ NSString *const KMLReadDetailsID = @"KMLReadDetailsID";
     
     self.praiseCountLabel = ({
         UILabel *lable = [UILabel new];
-//        lable.backgroundColor = UIColor
+        lable.backgroundColor = [UIColor clearColor];
         [self.bottomBar addSubview:lable];
         [lable mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.bottom.equalTo(self.bottomBar);
@@ -513,7 +536,7 @@ NSString *const KMLReadDetailsID = @"KMLReadDetailsID";
             break;
     }
     
-    if (!self.bottomBar) {
+    if (!self.showBottomBar) {
         self.showBottomBar = YES;
         self.bottomBarBottomOffsetConstraint.offset(0);
         [self.bottomBar setNeedsLayout];
@@ -547,9 +570,9 @@ NSString *const KMLReadDetailsID = @"KMLReadDetailsID";
 }
 
 -(MLBComment *)commentAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.section == 2 && indexPath.row < self.commentList.hotComments.count) {
+    if (indexPath.section == self.relatedList.count > 0 ? 2 : 1 && indexPath.row < self.commentList.hotComments.count) {
         return self.commentList.hotComments[indexPath.row];
-    }else if (indexPath.section == 3 && indexPath.row < _commentList.comments.count){
+    }else if (indexPath.section == self.relatedList.count > 0 ? 3 : 2 && indexPath.row < _commentList.comments.count){
         return self.commentList.comments[indexPath.row];
     }
     return nil;
@@ -628,7 +651,7 @@ NSString *const KMLReadDetailsID = @"KMLReadDetailsID";
 -(void)requestRelateds{
     __weak typeof(self) weakSelf = self;
     [MLBhttpRequester requestRelatedWithType:[MLBhttpRequester apiStringForReadWithReadType:self.viewType] itemId:[self contentId] success:^(id responseObject) {
-       __strong typeof(weakSelf) strongSelf = weakSelf;
+        __strong typeof(weakSelf) strongSelf = weakSelf;
         if (!strongSelf) {
             return;
         }
@@ -731,6 +754,11 @@ NSString *const KMLReadDetailsID = @"KMLReadDetailsID";
                     }
                 }
                 
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.tableView reloadData];
+                });
+                return;
+                
                 NSMutableArray *indexPaths;
                 if (lastHotComment) {
                     lastHotComment.lastHotComment = YES;
@@ -750,7 +778,8 @@ NSString *const KMLReadDetailsID = @"KMLReadDetailsID";
                             [self.operationQueue cancelAllOperations];
                             [self.operationQueue addOperationWithBlock:^{
                                 if (lastHotComment) {
-                                    [self.tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(2, 2)] withRowAnimation:UITableViewRowAnimationNone];
+                                    NSInteger index = self.relatedList.count > 0 ? 2 : 1;
+                                    [self.tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(index, index)] withRowAnimation:UITableViewRowAnimationNone];
                                 }else{
                                     if (indexPaths && indexPaths.count > 0) {
                                         [self.tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
@@ -840,23 +869,3 @@ NSString *const KMLReadDetailsID = @"KMLReadDetailsID";
 
 
 @end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -76,7 +76,7 @@ NSString *const KMLReadDetailsContentCellID = @"KMLReadDetailsContentCellID";
                                 NSParagraphStyleAttributeName:paragraphStyle};
     NSString *editorText = [NSString stringWithFormat:@"<br>\n<br>%@<br>\n",editor];
     NSString *string = [NSString stringWithFormat:@"%@%@",content,editorText];
-    NSMutableAttributedString *attributeString = [[NSMutableAttributedString alloc] initWithData:[string dataUsingEncoding:NSUTF8StringEncoding] options:@{NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType,
+    NSMutableAttributedString *attributeString = [[NSMutableAttributedString alloc] initWithData:[string dataUsingEncoding:NSUnicodeStringEncoding] options:@{NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType,
                                                                                                                                             NSCharacterEncodingDocumentAttribute:@(NSUnicodeStringEncoding)} documentAttributes:nil error:nil];
     NSRange editorRange = [attributeString.string rangeOfString:editor];
     [attributeString setAttributes:attribute range:NSMakeRange(0, attributeString.string.length - editorRange.length)];

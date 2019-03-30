@@ -11,7 +11,7 @@
 #import "MLBReadSerial.h"
 #import "MLBReadQuestion.h"
 #import "MLBReadDetailsView.h"
-//#import "aa"
+
 @interface MLBReadDetailsViewController ()<GMCPagingScrollViewDataSource,GMCPagingScrollViewDelegate>{
     AAPullToRefresh *pullToRefreshLeft;
     AAPullToRefresh *pullToRefreshRight;
