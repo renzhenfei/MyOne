@@ -170,15 +170,6 @@ NSString *const KMLReadDetailsID = @"KMLReadDetailsID";
             return self.commentList.comments.count;
         }
     }
-//    else if (self.viewType == 1 && self.relatedList && self.relatedList.count > 0){
-//        return self.relatedList.count;
-//    }else if (self.viewType == 2 && self.commentList){
-//        return self.commentList.hotComments.count;
-//    }else if (self.viewType == 3 && self.commentList){
-//        return self.commentList.comments.count;
-//    }else{
-//        return 0;
-//    }
     return 0;
 }
 

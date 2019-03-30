@@ -35,6 +35,7 @@ static const DDLogLevel ddLogLevel = DDLogLevelVerbose;
 #import "AAPullToRefresh.h"
 #import "MLBUIFactory.h"
 #import <ZYCornerRadius/UIImageView+CornerRadius.h>
+#import "UIImage+Common.h"
 
 #pragma mark - NSEnum
 
