@@ -142,10 +142,31 @@
 - (UIView *)pagingScrollView:(GMCPagingScrollView *)pagingScrollView pageForIndex:(NSUInteger)index{
     MLBMusicView *musicView = [pagingScrollView dequeueReusablePageWithIdentifier:KMLMusicViewID];
     [musicView prepareForReuse];
-    if (index == 0) {
-        [musicView configureViewWithMusicId:self.dataSource[index] indexpath:index inViewController:self];
-    }
+//    if (index == 0) {
+        [musicView configureViewWithMusicId:self.dataSource[index] viewIndex:index inViewController:self];
+//    }
     return musicView;
 }
+
+#pragma mark - Delegate
+
+//- (void)pagingScrollViewDidScroll:(GMCPagingScrollView *)pagingScrollView{
+//    if (self.pagingScrollView.isDragging) {
+//        CGPoint contentOffset = pagingScrollView.scrollView.contentOffset;
+//        pagingScrollView.scrollView.contentOffset = CGPointMake(contentOffset.x, 0);
+//    }
+//}
+
+//- (void)pagingScrollView:(GMCPagingScrollView *)pagingScrollView didScrollToPageAtIndex:(NSUInteger)index{
+//    if (index != 0 && (!pagingScrollView.scrollView.isTracking || !pagingScrollView.scrollView.isDecelerating)) {
+//        MLBMusicView *view = [pagingScrollView dequeueReusablePageWithIdentifier:KMLMusicViewID];
+//        [view prepareForReuse];
+//        [view configureViewWithMusicId:self.dataSource[index] viewIndex:index inViewController:self];
+//    }
+//}
+//
+//- (void)pagingScrollView:(GMCPagingScrollView *)pagingScrollView didEndDisplayingPage:(UIView *)page atIndex:(NSUInteger)index{
+//
+//}
 
 @end

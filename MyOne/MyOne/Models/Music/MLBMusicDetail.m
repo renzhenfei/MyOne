@@ -36,11 +36,11 @@
 }
 
 +(NSValueTransformer *)authorJSONTransformer{
-    return [MTLJSONAdapter transformerForModelPropertiesOfClass:[MLBAuthor class]];
+    return [MTLJSONAdapter dictionaryTransformerWithModelClass:[MLBAuthor class]];
 }
 
 +(NSValueTransformer *)storyAuthorJSONTransformer{
-    return [MTLJSONAdapter transformerForModelPropertiesOfClass:[MLBAuthor class]];
+    return [MTLJSONAdapter dictionaryTransformerWithModelClass:[MLBAuthor class]];
 }
 
 @end

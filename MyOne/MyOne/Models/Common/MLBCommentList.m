@@ -2,12 +2,12 @@
 //  MLBCommentList.m
 //  MyOne
 //
-//  Created by zhenfei ren on 2019/3/30.
+//  Created by zhenfei ren on 2019/3/22.
 //  Copyright © 2019 zhenfei ren. All rights reserved.
 //
 
 #import "MLBCommentList.h"
-
+#import "MLBComment.h"
 @implementation MLBCommentList
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey{
@@ -16,6 +16,10 @@
 }
 
 +(NSValueTransformer *)commentsJSONTransformer{
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[MLBComment class]];
+}
+
++(NSValueTransformer *)hotCommentsJSONTransformer{
     return [MTLJSONAdapter transformerForModelPropertiesOfClass:[MLBComment class]];
 }
 

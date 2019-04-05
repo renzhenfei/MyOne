@@ -14,8 +14,8 @@ FOUNDATION_EXPORT NSString *const KMLMusicViewID;
 
 -(void)prepareForReuse;
 
--(void)configureViewWithMusicId:(NSString *)musicId indexpath:(NSIndexPath *)indexPath;
+-(void)configureViewWithMusicId:(NSString *)musicId viewIndex:(NSInteger)viewIndex;
 
--(void)configureViewWithMusicId:(NSString *)musicId indexpath:(NSInteger)index inViewController:(UIViewController *)inViewController;
+-(void)configureViewWithMusicId:(NSString *)musicId viewIndex:(NSInteger)viewIndex inViewController:(UIViewController *)inViewController;
 
 @end

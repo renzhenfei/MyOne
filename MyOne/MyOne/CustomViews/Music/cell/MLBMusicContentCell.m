@@ -40,15 +40,6 @@ NSString *const KMLMusicContentCellID = @"KMLMusicContentCellID";
 
 #pragma mark LifeCycle
 
-- (instancetype)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        [self setupViews];
-    }
-    return self;
-}
-
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
@@ -62,7 +53,20 @@ NSString *const KMLMusicContentCellID = @"KMLMusicContentCellID";
 -(void)configurCellWithMusicetail:(MLBMusicDetail *)musicDetail{
     
     self.musicDetail = musicDetail;
-    if (!self.musicDetail) {
+    if (self.musicDetail) {
+        [self.coverView mlb_sd_setImageWithURL:self.musicDetail.cover placeholderImageName:@"music_cover_small" cachePlaceholderImage:NO];
+        [self.authorAvatarView mlb_sd_setImageWithURL:self.musicDetail.author.webURL placeholderImageName:@"personal"];
+        self.authorNameLabel.text = self.musicDetail.author.username;
+        self.authorDescLabel.text = self.musicDetail.author.desc;
+        self.titleLabel.text = self.musicDetail.title;
+        self.dateLabel.text = [MLBUtilities stringDateForMusicDetailsDateString:self.musicDetail.makeTime];
+        self.firstPublishView.image = [self firstPublishImageWithMusicDetails:self.musicDetail];
+        self.storyButton.selected = NO;
+        [self showContentWithType:self.musicDetail.contenttype == MLBMusicDetailsTypeNone ? MLBMusicDetailsTypeStory : self.musicDetail.contenttype];
+        [self.praiseButton setTitle:[NSString stringWithFormat:@"%ld",self.musicDetail.praiseNum] forState:UIControlStateNormal];
+        [self.commentButton setTitle:[NSString stringWithFormat:@"%ld",self.musicDetail.commentNum] forState:UIControlStateNormal];
+        [self.shareButton setTitle:[NSString stringWithFormat:@"%ld",self.musicDetail.shareNum] forState:UIControlStateNormal];
+    }else{
         self.coverView.image = [UIImage mlb_imageWithName:@"music_cover_small" cached:NO];
         self.authorAvatarView.image = [UIImage imageNamed:@"personal"];
         self.authorNameLabel.text = @"";
@@ -75,20 +79,8 @@ NSString *const KMLMusicContentCellID = @"KMLMusicContentCellID";
         [self.praiseButton setTitle:@"0" forState:UIControlStateNormal];
         [self.commentButton setTitle:@"0" forState:UIControlStateNormal];
         [self.shareButton setTitle:@"0" forState:UIControlStateNormal];
-        return;
     }
-    [self.coverView mlb_sd_setImageWithURL:self.musicDetail.cover placeholderImageName:@"music_cover_small" cachePlaceholderImage:NO];
-    [self.authorAvatarView mlb_sd_setImageWithURL:self.musicDetail.author.webURL placeholderImageName:@"personal" cachePlaceholderImage:NO];
-    self.authorNameLabel.text = self.musicDetail.author.username;
-    self.authorDescLabel.text = self.musicDetail.author.description;
-    self.titleLabel.text = self.musicDetail.title;
-    self.dateLabel.text = [MLBUtilities stringDateForMusicDetailsDateString:self.musicDetail.makeTime];
-    self.firstPublishView.image = [self firstPublishImageWithMusicDetails:self.musicDetail];
-    self.storyButton.selected = NO;
-    [self showContentWithType:self.musicDetail.contenttype == MLBMusicDetailsTypeNone ? MLBMusicDetailsTypeStory : self.musicDetail.contenttype];
-    [self.praiseButton setTitle:[NSString stringWithFormat:@"%ld",self.musicDetail.praiseNum] forState:UIControlStateNormal];
-    [self.commentButton setTitle:[NSString stringWithFormat:@"%ld",self.musicDetail.commentNum] forState:UIControlStateNormal];
-    [self.shareButton setTitle:[NSString stringWithFormat:@"%ld",self.musicDetail.shareNum] forState:UIControlStateNormal];
+    
 }
 
 #pragma mark - Private Method
@@ -143,7 +135,7 @@ NSString *const KMLMusicContentCellID = @"KMLMusicContentCellID";
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] init];
     if (type == MLBMusicDetailsTypeStory) {
         [attributedString appendAttributedString:[MLBUtilities mlb_attributedStringWithText:self.musicDetail.storyTitle lineSpacing:8 font:BoldFontWithSize(20) textColor:[UIColor blackColor]]];
-        [attributedString appendAttributedString:[MLBUtilities mlb_attributedStringWithText:self.musicDetail.storyAuthor.username lineSpacing:8 font:FontWithSize(12) textColor:MLBLightBlueTextColor]];
+        [attributedString appendAttributedString:[MLBUtilities mlb_attributedStringWithText:[NSString stringWithFormat:@"\n%@\n\n",self.musicDetail.storyAuthor.username] lineSpacing:8 font:FontWithSize(12) textColor:MLBLightBlueTextColor]];
         NSMutableAttributedString *attributeString1 = [[NSMutableAttributedString alloc] initWithAttributedString: [[NSAttributedString alloc] initWithData:[text dataUsingEncoding:NSUnicodeStringEncoding] options:@{NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType} documentAttributes:nil error:nil]];
         [attributeString1 setAttributes:@{NSFontAttributeName:FontWithSize(16),
                                           NSForegroundColorAttributeName:MLBLightBlackTextColor,
@@ -152,12 +144,29 @@ NSString *const KMLMusicContentCellID = @"KMLMusicContentCellID";
         
         [attributedString appendAttributedString:attributeString1];
     }else{
-        attributedString = [[NSMutableAttributedString alloc] initWithAttributedString:[MLBUtilities mlb_attributedStringWithText:text lineSpacing:8 font:FontWithSize(12) textColor:MLBColor7F7F7F]];
+        attributedString = [[NSMutableAttributedString alloc] initWithAttributedString:[MLBUtilities mlb_attributedStringWithText:text lineSpacing:8 font:FontWithSize(16) textColor:MLBColor7F7F7F]];
     }
+    
+    NSString *editorText = [NSString stringWithFormat:@"\n\n%@\n\n", self.musicDetail.chargeEditor];
+    [attributedString appendAttributedString:[MLBUtilities mlb_attributedStringWithText:editorText lineSpacing:8 font:FontWithSize(12) textColor:MLBColor7F7F7F]];
+    
     self.contentTextView.attributedText = attributedString;
 }
 
 -(UIImage *)firstPublishImageWithMusicDetails:(MLBMusicDetail *)musicDetail{
+    // isFirst 为0时，platform 为1则为虾米音乐首发，为2则不显示首发平台,
+    // isFirst 为1时，platform 为1则为虾米和一个联合首发，为2则为一个独家首发
+    NSString *imageName = @"";
+    if ([musicDetail.isFirst isEqualToString:@"0"] && [musicDetail.platform isEqualToString:@"1"]) {
+        imageName = @"xiami_music_first";
+    }else if ([musicDetail.isFirst isEqualToString:@"1"] && [musicDetail.platform isEqualToString:@"1"]){
+        imageName = @"one_and_xiami_music";
+    }else if ([musicDetail.isFirst isEqualToString:@"1"] && [musicDetail.platform isEqualToString:[@(2) stringValue]]){
+        imageName = @"one_first";
+    }
+    if (IsStringNotEmpty(imageName)) {
+        return [UIImage imageNamed:imageName];
+    }
     return nil;
 }
 
@@ -165,14 +174,15 @@ NSString *const KMLMusicContentCellID = @"KMLMusicContentCellID";
     if (self.coverView) {
         return;
     }
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.coverView = ({
         UIImageView *coverView = [UIImageView new];
         coverView.backgroundColor = [UIColor whiteColor];
-        coverView.contentMode = UIViewContentModeCenter;
+        coverView.contentMode = UIViewContentModeScaleAspectFill;
         coverView.clipsToBounds = YES;
         [self.contentView addSubview:coverView];
         [coverView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.height.mas_equalTo(coverView.mas_height).multipliedBy(1);
+            make.height.mas_equalTo(coverView.mas_width).multipliedBy(1);
             make.left.top.right.equalTo(self.contentView);
         }];
         coverView;
@@ -188,8 +198,8 @@ NSString *const KMLMusicContentCellID = @"KMLMusicContentCellID";
         authorView.layer.cornerRadius = 2;
         [self.contentView addSubview:authorView];
         [authorView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.height.greaterThanOrEqualTo(@120);
-            make.top.equalTo(self.contentView.mas_bottom).offset(-24);
+            make.height.equalTo(@120);
+            make.top.equalTo(self.coverView.mas_bottom).offset(-24);
             make.left.equalTo(self.contentView).offset(15);
             make.right.equalTo(self.contentView).offset(-15);
         }];
@@ -199,11 +209,14 @@ NSString *const KMLMusicContentCellID = @"KMLMusicContentCellID";
     self.authorAvatarView = ({
         UIImageView *avatarView = [UIImageView new];
         avatarView.backgroundColor = [UIColor whiteColor];
-        avatarView.layer.masksToBounds = YES;
-        avatarView.layer.cornerRadius = 50;
+        avatarView.layer.borderColor = [UIColor whiteColor].CGColor;
+        avatarView.layer.borderWidth = 1;
+        avatarView.layer.cornerRadius = 24;
+        avatarView.clipsToBounds = YES;
         [self.authorView addSubview:avatarView];
         [avatarView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.top.equalTo(self.authorView).offset(15);
+            make.left.equalTo(self.authorView).offset(16);
+            make.top.equalTo(self.authorView).offset(20);
             make.width.height.mas_equalTo(48);
         }];
         avatarView;
@@ -231,7 +244,7 @@ NSString *const KMLMusicContentCellID = @"KMLMusicContentCellID";
     });
     
     self.authorDescLabel = ({
-        UILabel *authorDescLable = [MLBUIFactory lableWithTextColor:MLBAppThemeColor font:FontWithSize(10)];
+        UILabel *authorDescLable = [MLBUIFactory lableWithTextColor:MLBLightGrayTextColor font:FontWithSize(12) numberOfLine:1];
         [self.authorView addSubview:authorDescLable];
         [authorDescLable mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.authorNameLabel);
@@ -241,20 +254,23 @@ NSString *const KMLMusicContentCellID = @"KMLMusicContentCellID";
     });
     
     self.titleLabel = ({
-        UILabel *titleLabel = [MLBUIFactory lableWithTextColor:MLBAppThemeColor font:FontWithSize(15)];
+        UILabel *titleLabel = [MLBUIFactory lableWithTextColor:MLBLightBlackTextColor font:FontWithSize(18)];
         [self.authorView addSubview:titleLabel];
         [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.greaterThanOrEqualTo(@[self.authorAvatarView.mas_bottom,self.authorDescLabel.mas_bottom]).offset(10);
             make.left.equalTo(self.authorAvatarView);
-            make.top.equalTo(self.authorAvatarView.mas_bottom).offset(16);
+            make.bottom.equalTo(self.authorView).offset(-16);
         }];
         titleLabel;
     });
     
     self.dateLabel = ({
-        UILabel *dateLabel = [MLBUIFactory lableWithTextColor:MLBAppThemeColor font:FontWithSize(10)];
+        UILabel *dateLabel = [MLBUIFactory lableWithTextColor:MLBLightGrayTextColor font:FontWithSize(12)];
+        [dateLabel setContentCompressionResistancePriority:251 forAxis:UILayoutConstraintAxisHorizontal];
         [self.authorView addSubview:dateLabel];
         [dateLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.bottom.equalTo(self.authorView).offset(-10);
+            make.left.greaterThanOrEqualTo(self.titleLabel.mas_right).offset(5);
+            make.right.bottom.equalTo(self.authorView).offset(-8);
         }];
         dateLabel;
     });
@@ -263,8 +279,10 @@ NSString *const KMLMusicContentCellID = @"KMLMusicContentCellID";
         UIButton *musicControlButton = [MLBUIFactory buttonWithImageName:@"play_normal" highLightImageName:@"play_highlighted" target:self action:@selector(playMusic)];
         [self.authorView addSubview:musicControlButton];
         [musicControlButton mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.equalTo(self.dateLabel).offset(-5);
-            make.bottom.equalTo(self.dateLabel.mas_top).offset(-10);
+            make.width.height.equalTo(@50);
+            make.left.greaterThanOrEqualTo(@[self.authorNameLabel.mas_right,self.authorDescLabel.mas_right]).offset(5);
+            make.right.equalTo(self.authorView).offset(-10);
+            make.bottom.equalTo(self.dateLabel.mas_top).offset(-8);
         }];
         musicControlButton;
     });
@@ -273,9 +291,9 @@ NSString *const KMLMusicContentCellID = @"KMLMusicContentCellID";
         UIButton *aboutButton = [MLBUIFactory buttonWithImageName:@"music_about_normal" selectedImageName:@"music_about_selected" target:self action:@selector(aboutClick)];
         [self.contentView addSubview:aboutButton];
         [aboutButton mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(44);
-            make.right.equalTo(self.authorView);
-            make.top.equalTo(self.authorView).offset(8);
+            make.size.sizeOffset(CGSizeMake(44, 44));
+            make.right.equalTo(self.contentView);
+            make.top.equalTo(self.authorView.mas_bottom);
         }];
         aboutButton;
     });
@@ -295,9 +313,9 @@ NSString *const KMLMusicContentCellID = @"KMLMusicContentCellID";
         UIButton *storyButton = [MLBUIFactory buttonWithImageName:@"music_story_normal" selectedImageName:@"music_story_selected" target:self action:@selector(storyClick)];
         [self.contentView addSubview:storyButton];
         [storyButton mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.lyricButton);
-            make.right.equalTo(self.lyricButton).offset(-8);
-            make.size.equalTo(self.lyricButton);
+            make.top.equalTo(self.aboutButton);
+            make.right.equalTo(self.lyricButton.mas_left).offset(-8);
+            make.size.equalTo(self.aboutButton);
         }];
         storyButton;
     });
@@ -305,12 +323,12 @@ NSString *const KMLMusicContentCellID = @"KMLMusicContentCellID";
     self.typeButtons = @[self.aboutButton,self.lyricButton,self.storyButton];
     
     self.contentTypeLabel = ({
-        UILabel *contentTypeLabel = [MLBUIFactory lableWithTextColor:MLBAppThemeColor font:FontWithSize(12)];
+        UILabel *contentTypeLabel = [MLBUIFactory lableWithTextColor:MLBColor7F7F7F font:FontWithSize(12)];
         contentTypeLabel.text = @"音乐故事";
         [self.contentView addSubview:contentTypeLabel];
         [contentTypeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.authorView);
-            make.bottom.equalTo(self.storyButton);
+            make.left.equalTo(self.contentView).offset(12);
+            make.bottom.equalTo(self.storyButton).offset(-8);
         }];
         contentTypeLabel;
     });
@@ -319,9 +337,12 @@ NSString *const KMLMusicContentCellID = @"KMLMusicContentCellID";
     [self.contentView addSubview:separator];
     [separator mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.mas_equalTo(0.5);
-        make.left.right.equalTo(self.contentView);
-        make.top.equalTo(self.contentTypeLabel.mas_bottom).offset(6);
+        make.left.equalTo(self.contentView).offset(6);
+        make.right.equalTo(self.contentView).offset(-6);
+        make.top.equalTo(self.storyButton.mas_bottom);
     }];
+    
+    [self.contentView bringSubviewToFront:self.authorView];
     
     self.contentTextView = ({
         UITextView *contentTextView = [UITextView new];
@@ -332,6 +353,7 @@ NSString *const KMLMusicContentCellID = @"KMLMusicContentCellID";
         contentTextView.scrollEnabled = NO;
         contentTextView.showsVerticalScrollIndicator = NO;
         contentTextView.showsHorizontalScrollIndicator = NO;
+        contentTextView.textContainerInset = UIEdgeInsetsMake(8, 8, 0, 8);
         [self.contentView addSubview:contentTextView];
         [contentTextView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.equalTo(self.contentView);
@@ -346,7 +368,7 @@ NSString *const KMLMusicContentCellID = @"KMLMusicContentCellID";
         [praiseButton setTitleColor:MLBDarkGrayTextColor forState:UIControlStateNormal];
         [praiseButton setTitleColor:MLBDarkGrayTextColor forState:UIControlStateSelected];
         praiseButton.backgroundColor = [UIColor whiteColor];
-        [self.contentTextView addSubview:praiseButton];
+        [self.contentView addSubview:praiseButton];
         [praiseButton mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.contentTextView.mas_bottom);
             make.left.bottom.equalTo(self.contentView);
@@ -364,7 +386,8 @@ NSString *const KMLMusicContentCellID = @"KMLMusicContentCellID";
         [self.contentView addSubview:commentButton];
         [commentButton mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.praiseButton.mas_right);
-            make.top.height.equalTo(self.praiseButton);
+            make.top.equalTo(self.praiseButton);
+            make.height.equalTo(self.praiseButton);
         }];
         commentButton;
     });
@@ -377,6 +400,7 @@ NSString *const KMLMusicContentCellID = @"KMLMusicContentCellID";
         shareButton.backgroundColor = [UIColor whiteColor];
         [self.contentView addSubview:shareButton];
         [shareButton mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.equalTo(@[self.praiseButton,self.commentButton]);
             make.left.equalTo(self.commentButton.mas_right);
             make.height.top.equalTo(self.commentButton);
             make.right.equalTo(self.contentView);
@@ -391,19 +415,17 @@ NSString *const KMLMusicContentCellID = @"KMLMusicContentCellID";
     [imageView0 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(1);
         make.left.equalTo(self.praiseButton.mas_right);
-        make.right.equalTo(self.commentButton.mas_left);
-        make.bottom.equalTo(self.praiseButton);
+        make.top.bottom.equalTo(self.praiseButton);
     }];
     
     UIImageView *imageView1 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_toolbar_line"]];
     imageView1.backgroundColor = [UIColor whiteColor];
     imageView1.contentMode = UIViewContentModeCenter;
-    [self.contentView addSubview:imageView0];
+    [self.contentView addSubview:imageView1];
     [imageView1 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(1);
         make.left.equalTo(self.commentButton.mas_right);
-        make.right.equalTo(self.shareButton.mas_left);
-        make.bottom.equalTo(self.praiseButton);
+        make.top.bottom.equalTo(self.commentButton);
     }];
     
     UIView *sepatrator0 = [MLBUIFactory separatorLine];
@@ -411,7 +433,7 @@ NSString *const KMLMusicContentCellID = @"KMLMusicContentCellID";
     [sepatrator0 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.contentView);
         make.height.mas_equalTo(0.5);
-        make.bottom.equalTo(self.praiseButton.mas_top);
+        make.top.equalTo(self.praiseButton);
     }];
     
     UIView *sepatrator1 = [MLBUIFactory separatorLine];
@@ -419,7 +441,7 @@ NSString *const KMLMusicContentCellID = @"KMLMusicContentCellID";
     [sepatrator1 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.contentView);
         make.height.mas_equalTo(0.5);
-        make.top.equalTo(self.praiseButton.mas_bottom);
+        make.bottom.equalTo(self.praiseButton);
     }];
 }
 
