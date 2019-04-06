@@ -1,6 +1,5 @@
 package com.example.administrator.one
 
-import android.content.Context
 import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.view.LayoutInflater
@@ -12,13 +11,10 @@ import com.trello.rxlifecycle2.components.support.RxFragment
 abstract class BaseFragment : RxFragment() {
     private var rxPermissions: RxPermissions? = null
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = LayoutInflater.from(context).inflate(getLayoutId(), container, false)
         initView(rootView)
+        initData()
         return rootView
     }
 
@@ -26,7 +22,7 @@ abstract class BaseFragment : RxFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         retainInstance = true
-        initData()
+
     }
 
     protected fun showProgress() {

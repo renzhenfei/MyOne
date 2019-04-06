@@ -1,17 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/dp_20">
 
-    <com.youth.banner.Banner
-        android:id="@+id/banner"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_200"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="30dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/dataList"
+        <ImageView
+            android:id="@+id/diaryTv"
+            android:layout_width="wrap_content"
+            android:layout_height="22dp"
+            android:drawablePadding="@dimen/dp_10"
+            android:src="@mipmap/diary_normal" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1px"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:src="@mipmap/share_image" />
+
+        <TextView
+            android:textColor="@color/MLBDarkGrayTextColor"
+            android:textSize="@dimen/dp_11"
+            android:id="@+id/likeTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="123" />
+
+        <ImageView
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:src="@mipmap/like_normal" />
+
+        <TextView
+            android:textColor="@color/MLBDarkGrayTextColor"
+            android:textSize="@dimen/dp_11"
+            android:id="@+id/shareTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/dp_10"
+            android:gravity="center"
+            android:text="343" />
+
+    </LinearLayout>
+
+    <com.example.administrator.one.common.widget.horizontalrefreshlayout.HorizontalRefreshLayout
+        android:id="@+id/refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content">
 
-</LinearLayout>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </com.example.administrator.one.common.widget.horizontalrefreshlayout.HorizontalRefreshLayout>
+</FrameLayout>

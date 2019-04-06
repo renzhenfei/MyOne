@@ -13,8 +13,15 @@ abstract class BaseActivity : RxAppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(getLayoutId())
         ImmersionBar.with(this).statusBarDarkFont(true).init()
+        if (hideActionBar()){
+            supportActionBar?.hide()
+        }
         initView()
         initData()
+    }
+
+    open fun hideActionBar():Boolean{
+        return true
     }
 
     abstract fun getLayoutId(): Int

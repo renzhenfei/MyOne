@@ -9,17 +9,15 @@ import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import com.example.administrator.one.common.api.API
-import com.example.administrator.one.common.api.ApiUrl
-import com.example.administrator.one.common.api.BaseObserver
+import android.widget.TextView
 import com.example.administrator.one.home.HomeFragment
 import com.example.administrator.one.movie.MovieFragment
 import com.example.administrator.one.music.MusicFragment
+import com.example.administrator.one.other.MeActivity
 import com.example.administrator.one.read.ReadFragment
+import com.example.administrator.one.util.Router
 import com.example.administrator.one.util.SelectorUtil
-import com.trello.rxlifecycle2.android.ActivityEvent
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.action_bar_content_view.view.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 enum class PageType {
@@ -29,6 +27,10 @@ enum class PageType {
 class MainActivity : BaseActivity() {
 
     private var mCurrentFragment: BaseFragment? = null
+    private var searchBtn:View? = null
+    private var meBtn:View? = null
+    private var title:TextView? = null
+    private var titleIcon:ImageView? = null
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -55,10 +57,22 @@ class MainActivity : BaseActivity() {
     private fun switchFragment(type: PageType) {
         val transaction = supportFragmentManager.beginTransaction()
         val newTag: String = when (type) {
-            PageType.HOME -> HomeFragment.TAG
-            PageType.READ -> ReadFragment.TAG
-            PageType.MUSIC -> MusicFragment.TAG
-            PageType.MOVIE -> MovieFragment.TAG
+            PageType.HOME -> {
+                setTitleIcon()
+                HomeFragment.TAG
+            }
+            PageType.READ -> {
+                setTitle("阅读")
+                ReadFragment.TAG
+            }
+            PageType.MUSIC -> {
+                setTitle("音乐")
+                MusicFragment.TAG
+            }
+            PageType.MOVIE -> {
+                setTitle("电影")
+                MovieFragment.TAG
+            }
         }
         var newFragment = supportFragmentManager.findFragmentByTag(newTag)
 
@@ -77,7 +91,7 @@ class MainActivity : BaseActivity() {
         } else {
             //第一次进来 newFragment也应该是null
             newFragment = newFragment(type)
-            transaction.add(newFragment, newTag)
+            transaction.add(R.id.fragment,newFragment,newTag)
         }
         transaction.commit()
         mCurrentFragment = newFragment as BaseFragment
@@ -88,33 +102,21 @@ class MainActivity : BaseActivity() {
     }
 
     override fun initData() {
-        API.retrofit?.create(ApiUrl::class.java)
-                ?.getRetrofit()
-                //绑定线程
-                ?.subscribeOn(Schedulers.io())
-                ?.observeOn(AndroidSchedulers.mainThread())
-                //绑定生命周期
-                ?.compose(bindUntilEvent(ActivityEvent.DESTROY))
-                ?.subscribe(object : BaseObserver<Any>() {
-                    override fun onFailure(code: Int?) {
-
-                    }
-
-                    override fun onSuccess(data: Any?) {
-
-                    }
-
-                })
+        switchFragment(PageType.HOME)
     }
 
     override fun initView() {
         val actionBarView = View.inflate(this, R.layout.action_bar_content_view, null)
+        searchBtn = actionBarView.leftIcon
+        meBtn = actionBarView.rightIcon
+        title = actionBarView.title
+        titleIcon = actionBarView.titleIcon
         val layoutP: ActionBar.LayoutParams = ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT)
         supportActionBar?.setCustomView(actionBarView, layoutP)
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar?.setDisplayShowCustomEnabled(true)
         if (Build.VERSION.SDK_INT >= 21) {
-            supportActionBar?.elevation = 0f
+            supportActionBar?.elevation = 1f
         }
         val colorStateList = SelectorUtil.generateColorStateList(this, R.color.text_color_checked, R.color.text_color_normal)
         navigation.itemTextColor = colorStateList
@@ -139,7 +141,13 @@ class MainActivity : BaseActivity() {
                 }
             }
         }
+        initListener()
+    }
+
+    private fun initListener() {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        searchBtn?.setOnClickListener { Router.toSearch(this) }
+        meBtn?.setOnClickListener { Router.toActivity(this,MeActivity::class.java) }
     }
 
     private fun newFragment(pageType: PageType): BaseFragment {
@@ -151,4 +159,19 @@ class MainActivity : BaseActivity() {
         }
     }
 
+    override fun hideActionBar(): Boolean {
+        return false
+    }
+
+    private fun setTitle(title: String){
+        this@MainActivity.title?.visibility = View.VISIBLE
+        this@MainActivity.titleIcon?.visibility = View.GONE
+        this@MainActivity.title?.text = title
+    }
+
+    private fun setTitleIcon(){
+        this@MainActivity.title?.visibility = View.GONE
+        this@MainActivity.titleIcon?.visibility = View.VISIBLE
+        this@MainActivity.titleIcon?.setImageResource(R.mipmap.nav_home_title)
+    }
 }

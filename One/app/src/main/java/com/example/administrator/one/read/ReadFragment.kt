@@ -3,6 +3,8 @@ package com.example.administrator.one.read
 import android.view.View
 import com.example.administrator.one.BaseFragment
 import com.example.administrator.one.R
+import com.example.administrator.one.util.GlideImageLoader
+import kotlinx.android.synthetic.main.fragment_read.view.*
 
 class ReadFragment : BaseFragment() {
 
@@ -14,7 +16,7 @@ class ReadFragment : BaseFragment() {
     }
 
     override fun initView(rootView: View) {
-
+        rootView.banner.setImages(mutableListOf<String>()).setImageLoader(GlideImageLoader())
     }
 
     override fun initData() {
@@ -23,5 +25,15 @@ class ReadFragment : BaseFragment() {
 
     override fun getLayoutId(): Int {
         return R.layout.fragment_read
+    }
+
+    override fun onStart() {
+        super.onStart()
+        view?.banner?.startAutoPlay()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        view?.banner?.stopAutoPlay()
     }
 }

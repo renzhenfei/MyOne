@@ -11,4 +11,13 @@
     <dimen tools:override="true" name="design_bottom_navigation_margin">0dp</dimen>
     <dimen tools:override="true" name="design_navigation_padding_bottom">0dp</dimen>
     <dimen tools:override="true" name="design_navigation_padding_top">0dp</dimen>
+    <dimen name="dp_32">32dp</dimen>
+    <dimen name="dp_20">20dp</dimen>
+    <dimen name="dp_250">250dp</dimen>
+    <dimen name="dp_6">6dp</dimen>
+    <dimen name="dp_100">100dp</dimen>
+    <dimen name="dp_160">160dp</dimen>
+    <dimen name="dp_5">5dp</dimen>
+    <dimen name="dp_3">3dp</dimen>
+    <dimen name="dp_11">11dp</dimen>
 </resources>

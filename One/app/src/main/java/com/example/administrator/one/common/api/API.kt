@@ -10,7 +10,7 @@ object API {
 
     init {
         retrofit = Retrofit.Builder()
-                .baseUrl("http://www.baidu.com")
+                .baseUrl(Constants.MLBApiServerAddress)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()

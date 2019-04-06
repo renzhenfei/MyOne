@@ -1,29 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <ImageView
-        android:paddingLeft="@dimen/padding_size_15"
         android:id="@+id/leftIcon"
-        android:src="@drawable/loading"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent" />
+        android:layout_width="@dimen/dp_20"
+        android:layout_height="@dimen/dp_20"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/padding_size_15"
+        android:src="@mipmap/icon_search" />
 
-    <TextView
-        tools:text="标题"
-        android:textSize="@dimen/title_size_16"
-        android:layout_gravity="center"
+    <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="@dimen/title_size_16"
+            tools:text="标题" />
+
+        <ImageView
+            android:id="@+id/titleIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+    </FrameLayout>
 
     <ImageView
-        android:layout_gravity="right"
-        android:src="@drawable/loading"
-        android:paddingRight="@dimen/padding_size_15"
         android:id="@+id/rightIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent" />
+        android:layout_width="@dimen/dp_20"
+        android:layout_height="@dimen/dp_20"
+        android:layout_gravity="right|center_vertical"
+        android:layout_marginRight="@dimen/padding_size_15"
+        android:src="@mipmap/nav_me_normal" />
 
 </FrameLayout>
