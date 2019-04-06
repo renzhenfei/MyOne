@@ -1,9 +1,14 @@
 package com.example.administrator.one
 
 import android.os.Build
-import android.support.v7.app.ActionBar
+import android.support.design.internal.BaselineLayout
+import android.support.design.internal.BottomNavigationMenuView
 import android.support.design.widget.BottomNavigationView
+import android.support.v7.app.ActionBar
+import android.util.TypedValue
 import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
 import com.example.administrator.one.common.api.API
 import com.example.administrator.one.common.api.ApiUrl
 import com.example.administrator.one.common.api.BaseObserver
@@ -55,10 +60,10 @@ class MainActivity : BaseActivity() {
             PageType.MUSIC -> MusicFragment.TAG
             PageType.MOVIE -> MovieFragment.TAG
         }
-        var newFragment= supportFragmentManager.findFragmentByTag(newTag)
+        var newFragment = supportFragmentManager.findFragmentByTag(newTag)
 
         if (mCurrentFragment != null) {
-            if (mCurrentFragment!! == newFragment ) {
+            if (mCurrentFragment!! == newFragment) {
                 //点击的同一个 可进行刷新页面处理
             } else {
                 transaction.hide(mCurrentFragment!!)
@@ -72,7 +77,7 @@ class MainActivity : BaseActivity() {
         } else {
             //第一次进来 newFragment也应该是null
             newFragment = newFragment(type)
-            transaction.add(newFragment,newTag)
+            transaction.add(newFragment, newTag)
         }
         transaction.commit()
         mCurrentFragment = newFragment as BaseFragment
@@ -111,13 +116,33 @@ class MainActivity : BaseActivity() {
         if (Build.VERSION.SDK_INT >= 21) {
             supportActionBar?.elevation = 0f
         }
-        val colorStateList = SelectorUtil.generateColorStateList(this, R.color.text_color_normal, R.color.text_color_checked)
+        val colorStateList = SelectorUtil.generateColorStateList(this, R.color.text_color_checked, R.color.text_color_normal)
         navigation.itemTextColor = colorStateList
-        navigation.itemIconTintList = colorStateList
+        navigation.itemIconTintList = null
+        val menuView: BottomNavigationMenuView = navigation.getChildAt(0) as BottomNavigationMenuView
+        for (i in 0..menuView.childCount) {
+            val childAt = menuView.getChildAt(i)
+            if (childAt is ViewGroup) {
+                for (j in 0..childAt.childCount) {
+                    val view = childAt.getChildAt(j)
+                    if (view is ImageView) {
+                        view.setPadding(0, -14, 0, 0)
+                        val layoutParams = view.layoutParams
+                        val displayMetrics = resources.displayMetrics
+                        layoutParams.height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40f, displayMetrics).toInt()
+                        layoutParams.width = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40f, displayMetrics).toInt()
+                        view.layoutParams = layoutParams
+                    }
+                    if (view is BaselineLayout) {
+                        view.setPadding(0, 0, 0, 0)
+                    }
+                }
+            }
+        }
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
     }
 
-    private fun newFragment(pageType: PageType):BaseFragment{
+    private fun newFragment(pageType: PageType): BaseFragment {
         return when (pageType) {
             PageType.HOME -> HomeFragment.newInstance()
             PageType.READ -> ReadFragment.newInstance()

@@ -1,7 +1,6 @@
 package com.example.administrator.one
 
 import android.os.Bundle
-import android.view.View
 import com.gyf.barlibrary.ImmersionBar
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
@@ -41,7 +40,7 @@ abstract class BaseActivity : RxAppCompatActivity() {
         }
         rxPermissions
                 ?.requestEachCombined(*permissions)
-                ?.subscribe({
+                ?.subscribe {
                     when {
                         it.granted -> permissionRequestResult(true)
                         it.shouldShowRequestPermissionRationale -> {//不再提示 引导用户自己打开该权限
@@ -51,7 +50,7 @@ abstract class BaseActivity : RxAppCompatActivity() {
                             permissionRequestResult(false)
                         }
                     }
-                })
+                }
     }
 
     /**
