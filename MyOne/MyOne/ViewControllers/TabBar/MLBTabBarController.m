@@ -13,6 +13,10 @@
 #import "MLBHomeViewController.h"
 @implementation MLBTabBarController
 
+- (void)viewDidAppear:(BOOL)animated{
+    NSLog(@"height = %f",[self.tabBar bounds].size.height);
+}
+
 - (instancetype)init
 {
     self = [super init];

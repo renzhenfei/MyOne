@@ -452,15 +452,21 @@ NSString *const KMLMusicContentCellID = @"KMLMusicContentCellID";
 }
 
 -(void)aboutClick{
-    
+    self.storyButton.selected = NO;
+    self.lyricButton.selected = NO;
+    self.aboutButton.selected = YES;
 }
 
 -(void)lyricClick{
-    
+    self.storyButton.selected = NO;
+    self.lyricButton.selected = YES;
+    self.aboutButton.selected = NO;
 }
 
 -(void)storyClick{
-    
+    self.storyButton.selected = YES;
+    self.lyricButton.selected = NO;
+    self.aboutButton.selected = NO;
 }
 
 -(void)praiseClick{
