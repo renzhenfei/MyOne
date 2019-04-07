@@ -1,6 +1,7 @@
 package com.example.administrator.one
 
 import android.os.Bundle
+import com.gyf.barlibrary.BarHide
 import com.gyf.barlibrary.ImmersionBar
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity
@@ -12,16 +13,24 @@ abstract class BaseActivity : RxAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(getLayoutId())
-        ImmersionBar.with(this).statusBarDarkFont(true).init()
-        if (hideActionBar()){
+        val immersionBar = ImmersionBar.with(this).statusBarDarkFont(true)
+        if (hideStatusBar()) {
+            immersionBar.hideBar(BarHide.FLAG_HIDE_BAR)
+        }
+        immersionBar.init()
+        if (hideActionBar()) {
             supportActionBar?.hide()
         }
         initView()
         initData()
     }
 
-    open fun hideActionBar():Boolean{
+    open fun hideActionBar(): Boolean {
         return true
+    }
+
+    open fun hideStatusBar(): Boolean {
+        return false
     }
 
     abstract fun getLayoutId(): Int
@@ -75,5 +84,6 @@ abstract class BaseActivity : RxAppCompatActivity() {
     }
 
     protected fun permissionRequestResult(granted: Boolean) {}
+
 
 }

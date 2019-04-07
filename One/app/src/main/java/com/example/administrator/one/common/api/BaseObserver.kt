@@ -1,6 +1,7 @@
 package com.example.administrator.one.common.api
 
 import android.util.Log
+import com.hjq.toast.ToastUtils
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 
@@ -24,6 +25,7 @@ abstract class BaseObserver<T> : Observer<BaseResponse<T>> {
 
     override fun onError(e: Throwable) {
         Log.e(TAG, "onError:" + e.message)
+        ToastUtils.show(e.message)
     }
 
     override fun onComplete() {

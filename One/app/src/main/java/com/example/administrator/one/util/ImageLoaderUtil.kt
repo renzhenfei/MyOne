@@ -16,6 +16,13 @@ object ImageLoaderUtil {
                 .into(img)
     }
 
+    fun displayThumbnailImage(context: Context,url: String,img: ImageView){
+        Glide.with(context)
+                .load(url)
+                .thumbnail(0.5f)
+                .into(img)
+    }
+
     fun displayRoundImage(context: Context,url:String,img:ImageView){
         Glide.with(context)
                 .load(url)

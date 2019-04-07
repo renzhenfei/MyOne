@@ -3,18 +3,18 @@
     package="com.example.administrator.one">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name=".App">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
@@ -25,15 +25,24 @@
             </intent-filter>
         </activity>
         <!--搜索-->
-        <activity android:name=".other.SearchActivity"
+        <activity
+            android:name=".other.SearchActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!--我的-->
-        <activity android:name=".other.MeActivity"
+        <activity
+            android:name=".other.MeActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <!--查看大图-->
+        <activity
+            android:name=".other.PreviewPicActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:launchMode="singleTask"
+            android:theme="@style/FullScreenStyle"
+            android:screenOrientation="portrait" />
     </application>
 
     <!--全面屏-->
@@ -43,7 +52,7 @@
     <!--适配华为（huawei）刘海屏-->
     <meta-data
         android:name="android.notch_support"
-        android:value="true"/>
+        android:value="true" />
     <!--适配小米（xiaomi）刘海屏-->
     <meta-data
         android:name="notch.config"

@@ -7,11 +7,19 @@
     <com.youth.banner.Banner
         android:id="@+id/banner"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_200"/>
+        android:layout_height="@dimen/dp_150" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/dataList"
+    <me.dkzwm.widget.srl.HorizontalSmoothRefreshLayout
+        android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vp0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </me.dkzwm.widget.srl.HorizontalSmoothRefreshLayout>
+
 
 </LinearLayout>

@@ -16,4 +16,10 @@
         <item name="android:background">@color/MLBSeparatorColor</item>
     </style>
 
+    <style name="FullScreenStyle" parent="AppTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
 </resources>

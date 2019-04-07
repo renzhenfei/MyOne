@@ -28,10 +28,10 @@ enum class PageType {
 class MainActivity : BaseActivity() {
 
     private var mCurrentFragment: BaseFragment? = null
-    private var searchBtn:View? = null
-    private var meBtn:View? = null
-    private var title:TextView? = null
-    private var titleIcon:ImageView? = null
+    private var searchBtn: View? = null
+    private var meBtn: View? = null
+    private var title: TextView? = null
+    private var titleIcon: ImageView? = null
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -84,7 +84,7 @@ class MainActivity : BaseActivity() {
                 transaction.hide(mCurrentFragment!!)
                 if (newFragment == null) {
                     newFragment = newFragment(type)
-                    transaction.add(newFragment, newTag)
+                    transaction.add(R.id.fragment, newFragment, newTag)
                 } else {
                     transaction.show(newFragment)
                 }
@@ -92,7 +92,7 @@ class MainActivity : BaseActivity() {
         } else {
             //第一次进来 newFragment也应该是null
             newFragment = newFragment(type)
-            transaction.add(R.id.fragment,newFragment,newTag)
+            transaction.add(R.id.fragment, newFragment, newTag)
         }
         transaction.commit()
         mCurrentFragment = newFragment as BaseFragment
@@ -117,7 +117,7 @@ class MainActivity : BaseActivity() {
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar?.setDisplayShowCustomEnabled(true)
         val toolbar = actionBarView.parent as Toolbar
-        toolbar.setContentInsetsAbsolute(0,0)
+        toolbar.setContentInsetsAbsolute(0, 0)
         if (Build.VERSION.SDK_INT >= 21) {
             supportActionBar?.elevation = 0f
         }
@@ -150,7 +150,7 @@ class MainActivity : BaseActivity() {
     private fun initListener() {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         searchBtn?.setOnClickListener { Router.toSearch(this) }
-        meBtn?.setOnClickListener { Router.toActivity(this,MeActivity::class.java) }
+        meBtn?.setOnClickListener { Router.toActivity(this, MeActivity::class.java) }
     }
 
     private fun newFragment(pageType: PageType): BaseFragment {
@@ -166,13 +166,13 @@ class MainActivity : BaseActivity() {
         return false
     }
 
-    private fun setTitle(title: String){
+    private fun setTitle(title: String) {
         this@MainActivity.title?.visibility = View.VISIBLE
         this@MainActivity.titleIcon?.visibility = View.GONE
         this@MainActivity.title?.text = title
     }
 
-    private fun setTitleIcon(){
+    private fun setTitleIcon() {
         this@MainActivity.title?.visibility = View.GONE
         this@MainActivity.titleIcon?.visibility = View.VISIBLE
         this@MainActivity.titleIcon?.setImageResource(R.mipmap.nav_home_title)

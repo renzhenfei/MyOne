@@ -35,9 +35,9 @@ object Constants {
     // 问题
     const val MLBApiQuestion = "question"
     // 阅读头部轮播列表
-    const val MLBApiReadingCarousel = "/reading/carousel"
+    const val MLBApiReadingCarousel = "reading/carousel"
     // 阅读文章索引列表
-    const val MLBApiReadingIndex = "/reading/index"
+    const val MLBApiReadingIndex = "reading/index"
     // 短篇文章详情
     const val MLBApiEssayDetailsById = "/essay/%@"
     // 月的文章列表

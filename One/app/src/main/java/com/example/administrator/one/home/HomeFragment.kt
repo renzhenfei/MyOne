@@ -1,15 +1,21 @@
 package com.example.administrator.one.home
 
+import android.content.Intent
 import android.graphics.Color
+import android.support.v4.app.ActivityCompat
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.view.ViewPager
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import com.example.administrator.one.BaseFragment
 import com.example.administrator.one.adapter.HomePagerAdapter
+import com.example.administrator.one.common.act.Act2
 import com.example.administrator.one.common.api.API
 import com.example.administrator.one.common.api.ApiUrl
 import com.example.administrator.one.common.api.BaseObserver
 import com.example.administrator.one.model.HomePageModel
+import com.example.administrator.one.other.PreviewPicActivity
 import com.trello.rxlifecycle2.android.FragmentEvent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -21,12 +27,12 @@ import me.dkzwm.widget.srl.extra.header.MaterialHeader
 import me.dkzwm.widget.srl.indicator.DefaultIndicator
 
 
-class HomeFragment : BaseFragment(), ViewPager.OnPageChangeListener {
+class HomeFragment : BaseFragment(), ViewPager.OnPageChangeListener, Act2<String, ImageView> {
 
     private var refreshLayout: HorizontalSmoothRefreshLayout? = null
     private val data = mutableListOf<HomePageModel>()
-    private val adapter = HomePagerAdapter(data)
-    private var vp:ViewPager? = null
+    private val adapter = HomePagerAdapter(data, this)
+    private var vp: ViewPager? = null
 
     companion object {
         val TAG = this::class.java.name
@@ -46,7 +52,8 @@ class HomeFragment : BaseFragment(), ViewPager.OnPageChangeListener {
         val footer = MaterialFooter<DefaultIndicator>(activity)
         footer.setProgressBarColors(intArrayOf(Color.RED, Color.BLUE, Color.GREEN, Color.BLACK))
         refreshLayout?.setFooterView(footer)
-        refreshLayout?.setDisableLoadMore(false)
+        refreshLayout?.setDisableLoadMore(true)
+        refreshLayout?.setDisableRefresh(true)
         refreshLayout?.setDisablePerformLoadMore(false)
         refreshLayout?.setEnableKeepRefreshView(true)
         refreshLayout?.setDisableWhenAnotherDirectionMove(true)
@@ -56,9 +63,8 @@ class HomeFragment : BaseFragment(), ViewPager.OnPageChangeListener {
             }
 
             override fun onLoadingMore() {
-                super.onLoadingMore()
+                initData()
             }
-
         })
         refreshLayout?.setRatioToKeep(1F)
         refreshLayout?.setRatioToRefresh(1F)
@@ -117,5 +123,12 @@ class HomeFragment : BaseFragment(), ViewPager.OnPageChangeListener {
 
     }
 
-
+    override fun act(t1: String, t2: ImageView) {
+        activity?.let {
+            val intent = Intent(it, PreviewPicActivity::class.java)
+            intent.putExtra(PreviewPicActivity.PICTURE_URL, t1)
+            val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(it, t2, t1)
+            ActivityCompat.startActivity(it, intent, optionsCompat.toBundle())
+        }
+    }
 }
