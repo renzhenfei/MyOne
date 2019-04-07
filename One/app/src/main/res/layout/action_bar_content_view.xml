@@ -43,4 +43,8 @@
         android:layout_marginRight="@dimen/padding_size_15"
         android:src="@mipmap/nav_me_normal" />
 
+    <View
+        style="@style/LineStyle"
+        android:layout_gravity="bottom"/>
+
 </FrameLayout>

@@ -5,6 +5,7 @@ import android.support.design.internal.BaselineLayout
 import android.support.design.internal.BottomNavigationMenuView
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.ActionBar
+import android.support.v7.widget.Toolbar
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
@@ -115,8 +116,10 @@ class MainActivity : BaseActivity() {
         supportActionBar?.setCustomView(actionBarView, layoutP)
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar?.setDisplayShowCustomEnabled(true)
+        val toolbar = actionBarView.parent as Toolbar
+        toolbar.setContentInsetsAbsolute(0,0)
         if (Build.VERSION.SDK_INT >= 21) {
-            supportActionBar?.elevation = 1f
+            supportActionBar?.elevation = 0f
         }
         val colorStateList = SelectorUtil.generateColorStateList(this, R.color.text_color_checked, R.color.text_color_normal)
         navigation.itemTextColor = colorStateList

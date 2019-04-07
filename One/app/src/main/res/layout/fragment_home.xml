@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:paddingBottom="@dimen/dp_20">
 
@@ -58,7 +59,7 @@
 
     </LinearLayout>
 
-    <com.example.administrator.one.common.widget.horizontalrefreshlayout.HorizontalRefreshLayout
+    <me.dkzwm.widget.srl.HorizontalSmoothRefreshLayout
         android:id="@+id/refresh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -68,5 +69,5 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </com.example.administrator.one.common.widget.horizontalrefreshlayout.HorizontalRefreshLayout>
+    </me.dkzwm.widget.srl.HorizontalSmoothRefreshLayout>
 </FrameLayout>
