@@ -16,6 +16,12 @@
         <item name="android:background">@color/MLBSeparatorColor</item>
     </style>
 
+    <style name="VerticalLineStyle">
+        <item name="android:layout_width">1px</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/MLBSeparatorColor</item>
+    </style>
+
     <style name="FullScreenStyle" parent="AppTheme">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowContentTransitions">true</item>

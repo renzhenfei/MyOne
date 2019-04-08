@@ -104,5 +104,14 @@ object Constants {
         MLBMusicDetailsTypeLyric,
         MLBMusicDetailsTypeInfo,
     }
+
+    enum class MusicPageType{
+        MusicPageTypeDetail,
+        MusicPageTypeRelated,
+        MusicPageTypeCommentHeader,
+        MusicPageTypeCommentFooter,
+        MusicPageTypeCommentHot,
+        MusicPageTypeCommentNormal
+    }
     //endregion
 }
