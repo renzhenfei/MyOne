@@ -90,9 +90,12 @@ class MainActivity : BaseActivity() {
                 }
             }
         } else {
-            //第一次进来 newFragment也应该是null
-            newFragment = newFragment(type)
-            transaction.add(R.id.fragment, newFragment, newTag)
+            if (newFragment == null) {
+                newFragment = newFragment(type)
+                transaction.add(R.id.fragment, newFragment, newTag)
+            } else {
+                transaction.show(newFragment)
+            }
         }
         transaction.commit()
         mCurrentFragment = newFragment as BaseFragment
