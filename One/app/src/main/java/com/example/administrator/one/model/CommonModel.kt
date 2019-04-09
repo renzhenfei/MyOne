@@ -21,6 +21,11 @@ data class CommentModel(@SerializedName("id") val commentId:String,
                         @SerializedName("user") val user:UserModel,
                         @SerializedName("toUser") val toUser:UserModel,
                         @SerializedName("commentType") private val commentType:Int):DetailType{
+
+    var numberOflines:Int = 0
+    var unfolded:Boolean = false//是否已经展开
+    var lastHotComment:Boolean = false
+
     override fun getType(): Constants.MusicPageType {
         return if (commentType == 0) Constants.MusicPageType.MusicPageTypeCommentHot else Constants.MusicPageType.MusicPageTypeCommentNormal
     }

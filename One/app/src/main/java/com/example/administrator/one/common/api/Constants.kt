@@ -47,9 +47,9 @@ object Constants {
     // 音乐
     const val MLBApiMusic  = "music"
     // 音乐Id列表
-    const val MLBApiMusicIdList  = "/music/idlist/0"
+    const val MLBApiMusicIdList  = "music/idlist/0"
     // 音乐详情
-    const val MLBApiMusicDetailsById  = "/music/detail/%@"
+    const val MLBApiMusicDetailsById  = "music/detail/{musicId}"
     // 月的音乐列表
     const val MLBApiMusicByMonth  = "/music/bymonth/%@"
     //endregion

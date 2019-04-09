@@ -5,16 +5,16 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Html
 import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.administrator.one.R
 import com.example.administrator.one.common.api.Constants
 import com.example.administrator.one.common.api.Constants.MLBMusicDetailsType.*
-import com.example.administrator.one.model.CommentModel
-import com.example.administrator.one.model.DetailType
-import com.example.administrator.one.model.MusicDetailModel
-import com.example.administrator.one.model.MusicRelatedListModel
+import com.example.administrator.one.model.*
 import com.example.administrator.one.util.CommonUtils
 import com.example.administrator.one.util.ImageLoaderUtil
 import kotlinx.android.synthetic.main.cell_common_comment.view.*
@@ -37,7 +37,7 @@ class MusicPageDetailAdapter(private val pageDetail: MutableList<DetailType>) : 
     }
 
     override fun getItemCount(): Int {
-        return 2 + pageDetail.size
+        return if (pageDetail.size > 0) 2 + pageDetail.size else 0
     }
 
     override fun onBindViewHolder(p0: TypeVH, p1: Int) {
@@ -117,7 +117,7 @@ class MusicPageDetailAdapter(private val pageDetail: MutableList<DetailType>) : 
             if (contentStr.isEmpty()) {
                 return
             }
-            if (type == MLBMusicDetailsTypeStory){
+            if (type == MLBMusicDetailsTypeStory) {
                 rootView.contentTitle.visibility = View.GONE
                 rootView.userName.visibility = View.GONE
                 //title
@@ -130,7 +130,7 @@ class MusicPageDetailAdapter(private val pageDetail: MutableList<DetailType>) : 
                 } else {
                     rootView.content.text = Html.fromHtml(contentStr)
                 }
-            }else{
+            } else {
                 rootView.contentTitle.visibility = View.GONE
                 rootView.userName.visibility = View.GONE
                 rootView.content.text = contentStr
@@ -141,7 +141,7 @@ class MusicPageDetailAdapter(private val pageDetail: MutableList<DetailType>) : 
     inner class RelatedMusicVH(private val rootView: View) : TypeVH(rootView) {
         override fun <T> configData(data: T) {
             val musicRelatedModel = data as MusicRelatedListModel
-            rootView.relatedMusicList.layoutManager = LinearLayoutManager(rootView.context,LinearLayoutManager.HORIZONTAL,false)
+            rootView.relatedMusicList.layoutManager = LinearLayoutManager(rootView.context, LinearLayoutManager.HORIZONTAL, false)
             rootView.relatedMusicList.adapter = RelatedMusicAdapter(musicRelatedModel.relatedMusicList)
         }
     }
@@ -149,20 +149,38 @@ class MusicPageDetailAdapter(private val pageDetail: MutableList<DetailType>) : 
     inner class CommentVH(private val rootView: View) : TypeVH(rootView) {
         override fun <T> configData(data: T) {
             val commentModel = data as CommentModel
-            ImageLoaderUtil.displayRoundImage(rootView.context,commentModel.user.webURL,rootView.userAvatarView)
+            ImageLoaderUtil.displayRoundImage(rootView.context, commentModel.user.webURL, rootView.userAvatarView)
             rootView.userNameLabel.text = commentModel.user.userName.trim()
-            rootView.dateLabel.text = CommonUtils.formatTime(commentModel.inputDate,"yyyy.MM.dd")
+            rootView.dateLabel.text = CommonUtils.formatTime(commentModel.inputDate, "yyyy.MM.dd")
             rootView.praise.text = commentModel.praiseNum.toString()
-            if (commentModel.quote.isNotEmpty()){
+            if (commentModel.quote.isNotEmpty()) {
+                val sb = SpannableStringBuilder()
                 val text = SpannableString(commentModel.toUser.userName.trim())
-//                text.
+                text.setSpan(ForegroundColorSpan(rootView.context.resources.getColor(R.color.MLBColor484848)), 0, text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                sb.append(text)
+                sb.append(":")
+                sb.append("\n")
+                sb.append(commentModel.quote)
+                rootView.replyContentLabel.text = sb
+            } else {
+                rootView.replyContentLabel.text = ""
             }
+            rootView.contentLabel.text = commentModel.content
+            if (commentModel.unfolded || commentModel.numberOflines < 5) {
+                rootView.contentLabel.setLines(if (commentModel.unfolded) 0 else 5)
+                rootView.unFold.isEnabled = false
+            } else {
+                rootView.contentLabel.setLines(5)
+                rootView.unFold.isEnabled = true
+            }
+//            setIsRecyclable()
         }
     }
 
-    inner class HeaderFooterVH(rootView: View) : TypeVH(rootView) {
+    inner class HeaderFooterVH(private val rootView: View) : TypeVH(rootView) {
         override fun <T> configData(data: T) {
-
+            val model = data as HeaderFooterModel
+            rootView.content.text = model.content
         }
     }
 }
