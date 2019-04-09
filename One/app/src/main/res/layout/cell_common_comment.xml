@@ -1,6 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/userAvatarView"
+            android:layout_marginTop="@dimen/dp_26"
+            android:layout_marginLeft="@dimen/dp_18"
+            android:layout_width="@dimen/dp_36"
+            android:layout_height="@dimen/dp_36" />
+
+        <TextView
+            android:textSize="@dimen/dp_15"
+            android:textColor="@color/MLBColor4A90E2"
+            android:id="@+id/userNameLabel"
+            android:layout_toRightOf="@id/userAvatarView"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_width="wrap_content"
+            android:layout_alignTop="@id/userAvatarView"
+            android:layout_marginTop="@dimen/dp_3"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:textColor="@color/MLBColorB8B8B8"
+            android:textSize="@dimen/dp_12"
+            android:id="@+id/dateLabel"
+            android:layout_alignLeft="@id/userNameLabel"
+            android:layout_below="@id/userNameLabel"
+            android:layout_marginTop="@dimen/dp_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            tools:text="23"
+            android:id="@+id/praise"
+            android:drawablePadding="@dimen/dp_6"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/dp_30"
+            android:layout_marginRight="@dimen/dp_20"
+            android:drawableLeft="@drawable/selector_comment_like_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_15" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:lines="3"
+        android:id="@+id/contentLabel"
+        android:textSize="@dimen/dp_13"
+        android:lineSpacingExtra="@dimen/dp_8"
+        android:textColor="@color/MLBColor626262"
+        android:paddingTop="@dimen/dp_13"
+        android:paddingRight="@dimen/dp_13"
+        android:paddingBottom="@dimen/dp_3"
+        android:paddingLeft="@dimen/dp_13"
+        android:layout_marginTop="@dimen/dp_16"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginRight="@dimen/dp_17"
+        android:background="@drawable/shape_comment_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/unFold"
+        android:text="展开"
+        android:textColor="@color/MLBColor8FBFF9"
+        android:textSize="@dimen/dp_16"
+        android:layout_gravity="right"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_width="@dimen/dp_32"
+        android:layout_height="wrap_content" />
+
+    <View style="@style/LineStyle"/>
+    <View style="@style/LineStyle"
+        android:layout_marginTop="@dimen/dp_6"/>
 
 </LinearLayout>

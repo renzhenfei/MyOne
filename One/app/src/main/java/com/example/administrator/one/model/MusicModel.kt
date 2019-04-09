@@ -41,7 +41,9 @@ data class MusicRelatedModel(@SerializedName("id") val musicId:String,
                              @SerializedName("cover") val cover:String,
                              @SerializedName("platform") val platform:String,
                              @SerializedName("musicLongId") val musicLongId:String,
-                             @SerializedName("author") val author:AuthorModel):DetailType {
+                             @SerializedName("author") val author:AuthorModel)
+
+data class MusicRelatedListModel(val relatedMusicList:MutableList<MusicRelatedModel>):DetailType {
     override fun getType(): Constants.MusicPageType {
         return Constants.MusicPageType.MusicPageTypeRelated
     }

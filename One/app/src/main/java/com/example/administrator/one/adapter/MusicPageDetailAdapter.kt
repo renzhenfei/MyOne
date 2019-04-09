@@ -1,23 +1,25 @@
 package com.example.administrator.one.adapter
 
 import android.os.Build
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Html
 import android.text.SpannableString
-import android.text.SpannableStringBuilder
-import android.text.Spanned
-import android.text.style.AbsoluteSizeSpan
-import android.text.style.TypefaceSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.administrator.one.R
 import com.example.administrator.one.common.api.Constants
 import com.example.administrator.one.common.api.Constants.MLBMusicDetailsType.*
-import com.example.administrator.one.model.*
+import com.example.administrator.one.model.CommentModel
+import com.example.administrator.one.model.DetailType
+import com.example.administrator.one.model.MusicDetailModel
+import com.example.administrator.one.model.MusicRelatedListModel
 import com.example.administrator.one.util.CommonUtils
 import com.example.administrator.one.util.ImageLoaderUtil
+import kotlinx.android.synthetic.main.cell_common_comment.view.*
 import kotlinx.android.synthetic.main.cell_page_detail.view.*
+import kotlinx.android.synthetic.main.cell_page_related_music.view.*
 
 class MusicPageDetailAdapter(private val pageDetail: MutableList<DetailType>) : RecyclerView.Adapter<MusicPageDetailAdapter.TypeVH>() {
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): TypeVH {
@@ -115,28 +117,46 @@ class MusicPageDetailAdapter(private val pageDetail: MutableList<DetailType>) : 
             if (contentStr.isEmpty()) {
                 return
             }
-            val content = SpannableStringBuilder()
-            //title
-            val title = SpannableString(detailModel?.title)
-            title.setSpan(AbsoluteSizeSpan(20,true),0,title.length,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-            //content
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                content.append(Html.fromHtml(contentStr, Html.FROM_HTML_MODE_COMPACT))
-            } else {
-                rootView.content.text = Html.fromHtml(contentStr)
+            if (type == MLBMusicDetailsTypeStory){
+                rootView.contentTitle.visibility = View.GONE
+                rootView.userName.visibility = View.GONE
+                //title
+                rootView.contentTitle.text = detailModel?.storyTitle
+                //username
+                rootView.userName.text = detailModel?.storyAuthor?.userName
+                //content
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    rootView.content.text = Html.fromHtml(contentStr, Html.FROM_HTML_MODE_COMPACT)
+                } else {
+                    rootView.content.text = Html.fromHtml(contentStr)
+                }
+            }else{
+                rootView.contentTitle.visibility = View.GONE
+                rootView.userName.visibility = View.GONE
+                rootView.content.text = contentStr
             }
         }
     }
 
-    inner class RelatedMusicVH(rootView: View) : TypeVH(rootView) {
+    inner class RelatedMusicVH(private val rootView: View) : TypeVH(rootView) {
         override fun <T> configData(data: T) {
-
+            val musicRelatedModel = data as MusicRelatedListModel
+            rootView.relatedMusicList.layoutManager = LinearLayoutManager(rootView.context,LinearLayoutManager.HORIZONTAL,false)
+            rootView.relatedMusicList.adapter = RelatedMusicAdapter(musicRelatedModel.relatedMusicList)
         }
     }
 
-    inner class CommentVH(rootView: View) : TypeVH(rootView) {
+    inner class CommentVH(private val rootView: View) : TypeVH(rootView) {
         override fun <T> configData(data: T) {
-
+            val commentModel = data as CommentModel
+            ImageLoaderUtil.displayRoundImage(rootView.context,commentModel.user.webURL,rootView.userAvatarView)
+            rootView.userNameLabel.text = commentModel.user.userName.trim()
+            rootView.dateLabel.text = CommonUtils.formatTime(commentModel.inputDate,"yyyy.MM.dd")
+            rootView.praise.text = commentModel.praiseNum.toString()
+            if (commentModel.quote.isNotEmpty()){
+                val text = SpannableString(commentModel.toUser.userName.trim())
+//                text.
+            }
         }
     }
 
