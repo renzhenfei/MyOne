@@ -27,8 +27,8 @@ class MusicPageDetailAdapter(private val pageDetail: MutableList<DetailType>) : 
         val vh: TypeVH? = when (getItemViewType(p1)) {
             Constants.MusicPageType.MusicPageTypeDetail.ordinal -> DetailVH(inflater.inflate(R.layout.cell_page_detail, p0, false))
             Constants.MusicPageType.MusicPageTypeRelated.ordinal -> RelatedMusicVH(inflater.inflate(R.layout.cell_page_related_music, p0, false))
-            Constants.MusicPageType.MusicPageTypeCommentHot.ordinal, Constants.MusicPageType.MusicPageTypeCommentNormal.ordinal -> RelatedMusicVH(inflater.inflate(R.layout.cell_common_comment, p0, false))
-            Constants.MusicPageType.MusicPageTypeCommentHeader.ordinal, Constants.MusicPageType.MusicPageTypeCommentFooter.ordinal -> RelatedMusicVH(inflater.inflate(R.layout.cell_common_header_footer, p0, false))
+            Constants.MusicPageType.MusicPageTypeCommentHot.ordinal, Constants.MusicPageType.MusicPageTypeCommentNormal.ordinal -> CommentVH(inflater.inflate(R.layout.cell_common_comment, p0, false))
+            Constants.MusicPageType.MusicPageTypeCommentHeader.ordinal, Constants.MusicPageType.MusicPageTypeCommentFooter.ordinal -> HeaderFooterVH(inflater.inflate(R.layout.cell_common_header_footer, p0, false))
             else -> {
                 null
             }
@@ -79,6 +79,9 @@ class MusicPageDetailAdapter(private val pageDetail: MutableList<DetailType>) : 
             rootView.title.text = detailModel?.title
             rootView.dateTime.text = CommonUtils.formatTime(detailModel?.makeTime, "MMM dd,yyyy")
             rootView.musicControl.isSelected = false
+            rootView.share.text = detailModel?.shareNum.toString()
+            rootView.comment.text = detailModel?.commentNum.toString()
+            rootView.like.text = detailModel?.praiseNum.toString()
             showContentWithType(if (detailModel?.contentType == null || detailModel?.contentType == MLBMusicDetailsTypeNone) MLBMusicDetailsTypeStory else detailModel?.contentType!!)
         }
 
@@ -154,6 +157,7 @@ class MusicPageDetailAdapter(private val pageDetail: MutableList<DetailType>) : 
             rootView.dateLabel.text = CommonUtils.formatTime(commentModel.inputDate, "yyyy.MM.dd")
             rootView.praise.text = commentModel.praiseNum.toString()
             if (commentModel.quote.isNotEmpty()) {
+                rootView.replyContentLabel.visibility = View.VISIBLE
                 val sb = SpannableStringBuilder()
                 val text = SpannableString(commentModel.toUser.userName.trim())
                 text.setSpan(ForegroundColorSpan(rootView.context.resources.getColor(R.color.MLBColor484848)), 0, text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -163,15 +167,16 @@ class MusicPageDetailAdapter(private val pageDetail: MutableList<DetailType>) : 
                 sb.append(commentModel.quote)
                 rootView.replyContentLabel.text = sb
             } else {
+                rootView.replyContentLabel.visibility = View.GONE
                 rootView.replyContentLabel.text = ""
             }
             rootView.contentLabel.text = commentModel.content
             if (commentModel.unfolded || commentModel.numberOflines < 5) {
-                rootView.contentLabel.setLines(if (commentModel.unfolded) 0 else 5)
                 rootView.unFold.isEnabled = false
+                rootView.unFold.visibility = View.GONE
             } else {
-                rootView.contentLabel.setLines(5)
                 rootView.unFold.isEnabled = true
+                rootView.unFold.visibility = View.GONE
             }
 //            setIsRecyclable()
         }

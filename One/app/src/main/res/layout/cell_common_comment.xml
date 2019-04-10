@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingTop="@dimen/dp_20"
+    android:paddingBottom="@dimen/dp_20">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -13,8 +15,7 @@
             android:id="@+id/userAvatarView"
             android:layout_width="@dimen/dp_36"
             android:layout_height="@dimen/dp_36"
-            android:layout_marginLeft="@dimen/dp_18"
-            android:layout_marginTop="@dimen/dp_26" />
+            android:layout_marginLeft="@dimen/dp_18" />
 
         <TextView
             android:id="@+id/userNameLabel"
@@ -37,16 +38,31 @@
             android:textColor="@color/MLBColorB8B8B8"
             android:textSize="@dimen/dp_12" />
 
-        <TextView
-            android:id="@+id/praise"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp_18"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="@dimen/dp_30"
+            android:layout_marginTop="@dimen/dp_2"
             android:layout_marginRight="@dimen/dp_20"
-            android:drawableLeft="@drawable/selector_comment_like_icon"
-            android:drawablePadding="@dimen/dp_3"
-            tools:text="23" />
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/likeIcon"
+                android:layout_width="@dimen/dp_20"
+                android:layout_height="@dimen/dp_20"
+                android:src="@drawable/selector_comment_like_icon" />
+
+            <TextView
+                android:id="@+id/praise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="@dimen/dp_1"
+                android:textColor="@color/MLBColor626262"
+                android:textSize="@dimen/dp_12"
+                tools:text="23" />
+
+        </LinearLayout>
+
 
     </RelativeLayout>
 
@@ -59,23 +75,22 @@
         android:layout_marginRight="@dimen/dp_17"
         android:background="@drawable/shape_comment_content"
         android:lineSpacingExtra="@dimen/dp_8"
-        android:lines="3"
         android:paddingLeft="@dimen/dp_13"
         android:paddingTop="@dimen/dp_13"
         android:paddingRight="@dimen/dp_13"
         android:paddingBottom="@dimen/dp_3"
         android:textColor="@color/MLBColor626262"
-        android:textSize="@dimen/dp_13" />
+        android:textSize="@dimen/dp_13"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/contentLabel"
-        android:lineSpacingExtra="@dimen/dp_8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_20"
         android:layout_marginTop="@dimen/dp_10"
         android:layout_marginRight="@dimen/dp_17"
-        android:lines="5"
+        android:lineSpacingExtra="@dimen/dp_8"
         android:textColor="@color/MLBColor0E0E0E"
         android:textSize="@dimen/dp_16" />
 
@@ -90,10 +105,10 @@
         android:textColor="@color/MLBColor8FBFF9"
         android:textSize="@dimen/dp_16" />
 
-    <View style="@style/LineStyle" />
-
-    <View
-        style="@style/LineStyle"
-        android:layout_marginTop="@dimen/dp_6" />
+    <!--<View-->
+    <!--android:background="@color/MLBSeparatorColor"-->
+    <!--android:layout_marginTop="@dimen/dp_10"-->
+    <!--android:layout_height="@dimen/dp_2"-->
+    <!--android:layout_width="match_parent"/>-->
 
 </LinearLayout>

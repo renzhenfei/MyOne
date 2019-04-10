@@ -3,6 +3,7 @@ package com.example.administrator.one.common.api
 import com.example.administrator.one.model.*
 import io.reactivex.Observable
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.Path
 
 interface ApiUrl {
@@ -26,8 +27,9 @@ interface ApiUrl {
     fun getMusicDetailsRelatedMusicsById(@Path("musicId") musicId:String,
                                          @Path("music") music : String = Constants.MLBApiMusic):Observable<BaseResponse<MutableList<MusicRelatedModel>>>
 
+    @Headers("User-Agent: One")
     @GET(Constants.MLBApiGetPraiseAndTimeComments)
     fun getMusicPraiseAndTimeComments(@Path("musicId") musicId:String,
                                       @Path("lastCommentId") lastCommentId:String?,
-                                      @Path("music") music:String = Constants.MLBApiMusic):Observable<BaseResponse<MutableList<CommentModel>>>
+                                      @Path("music") music:String = Constants.MLBApiMusic):Observable<BaseResponse<CommentListModel>>
 }

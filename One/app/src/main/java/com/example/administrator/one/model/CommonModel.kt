@@ -16,11 +16,11 @@ data class UserModel(@SerializedName("user_id") val userId:String,
 data class CommentModel(@SerializedName("id") val commentId:String,
                         @SerializedName("quote") val quote:String,
                         @SerializedName("content") val content:String,
-                        @SerializedName("praiseNum") val praiseNum:Int,
-                        @SerializedName("inputDate") val inputDate:String,
+                        @SerializedName("praisenum") val praiseNum:Int,
+                        @SerializedName("input_date") val inputDate:String,
                         @SerializedName("user") val user:UserModel,
-                        @SerializedName("toUser") val toUser:UserModel,
-                        @SerializedName("commentType") private val commentType:Int):DetailType{
+                        @SerializedName("touser") val toUser:UserModel,
+                        @SerializedName("type") private val commentType:Int):DetailType{
 
     var numberOflines:Int = 0
     var unfolded:Boolean = false//是否已经展开
@@ -33,7 +33,7 @@ data class CommentModel(@SerializedName("id") val commentId:String,
 
 data class CommentListModel(@SerializedName("count") val count:Int,
                             @SerializedName("data") val comments:MutableList<CommentModel>,
-                            @SerializedName("data") val hotComments:MutableList<CommentModel>)
+                            val hotComments:MutableList<CommentModel>)
 
 data class HeaderFooterModel(val content: String,val type : Int) : DetailType {
     override fun getType(): Constants.MusicPageType {

@@ -62,7 +62,7 @@ class MusicDetailFragment : BaseFragment() {
                     override fun onSuccess(data: MusicDetailModel?) {
                         if (data != null){
                             this@MusicDetailFragment.data.add(data)
-                            adapter.notifyDataSetChanged()
+//                            adapter.notifyDataSetChanged()
                             getRelatedMusicData(musicId)
                         }
                     }
@@ -86,7 +86,7 @@ class MusicDetailFragment : BaseFragment() {
                     override fun onSuccess(data: MutableList<MusicRelatedModel>?) {
                         if (data != null && data.isNotEmpty()){
                             this@MusicDetailFragment.data.add(MusicRelatedListModel(data))
-                            adapter.notifyDataSetChanged()
+//                            adapter.notifyDataSetChanged()
                         }
                         getMusicCommentData(musicId)
                     }
@@ -95,20 +95,20 @@ class MusicDetailFragment : BaseFragment() {
 
     private fun getMusicCommentData(musicId: String) {
         API.retrofit?.create(ApiUrl::class.java)
-                ?.getMusicPraiseAndTimeComments(musicId,"")
+                ?.getMusicPraiseAndTimeComments(musicId,"abc"/*随便写点东西都行*/)
                 //绑定线程
                 ?.subscribeOn(Schedulers.io())
                 ?.observeOn(AndroidSchedulers.mainThread())
                 //绑定生命周期
                 ?.compose(bindUntilEvent(FragmentEvent.DESTROY))
-                ?.subscribe(object : BaseObserver<MutableList<CommentModel>>() {
+                ?.subscribe(object : BaseObserver<CommentListModel>() {
                     override fun onFailure(code: Int?) {
                     }
 
-                    override fun onSuccess(data: MutableList<CommentModel>?) {
-                        if (data != null && data.isNotEmpty()){
+                    override fun onSuccess(data: CommentListModel?) {
+                        if (data != null && data.comments.isNotEmpty()){
                             var flag = false
-                            data.filter { it.getType() == Constants.MusicPageType.MusicPageTypeCommentHot }.forEach {
+                            data.comments.filter { it.getType() == Constants.MusicPageType.MusicPageTypeCommentHot }.forEach {
                                 if (!flag){
                                 this@MusicDetailFragment.data.add(HeaderFooterModel("热门评论列表",Constants.MusicPageType.MusicPageTypeCommentHeader.ordinal))
                                     flag = true
@@ -116,7 +116,7 @@ class MusicDetailFragment : BaseFragment() {
                                 this@MusicDetailFragment.data.add(it)
                             }
                             flag = false
-                            data.filter { it.getType() != Constants.MusicPageType.MusicPageTypeCommentHot }.forEach {
+                            data.comments.filter { it.getType() != Constants.MusicPageType.MusicPageTypeCommentHot }.forEach {
                                 if (!flag){
                                     this@MusicDetailFragment.data.add(HeaderFooterModel("评论列表",Constants.MusicPageType.MusicPageTypeCommentFooter.ordinal))
                                     flag = true
@@ -125,7 +125,6 @@ class MusicDetailFragment : BaseFragment() {
                             }
                             adapter.notifyDataSetChanged()
                         }
-                        getMusicCommentData(musicId)
                     }
                 })
     }
