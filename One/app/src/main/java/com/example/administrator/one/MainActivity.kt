@@ -80,6 +80,7 @@ class MainActivity : BaseActivity() {
         if (mCurrentFragment != null) {
             if (mCurrentFragment!! == newFragment) {
                 //点击的同一个 可进行刷新页面处理
+                mCurrentFragment?.initData()
             } else {
                 transaction.hide(mCurrentFragment!!)
                 if (newFragment == null) {

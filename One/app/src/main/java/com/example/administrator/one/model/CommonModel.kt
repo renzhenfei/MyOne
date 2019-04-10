@@ -29,11 +29,14 @@ data class CommentModel(@SerializedName("id") val commentId:String,
     override fun getType(): Constants.MusicPageType {
         return if (commentType == 0) Constants.MusicPageType.MusicPageTypeCommentHot else Constants.MusicPageType.MusicPageTypeCommentNormal
     }
-
 }
 
 data class CommentListModel(@SerializedName("count") val count:Int,
                             @SerializedName("data") val comments:MutableList<CommentModel>,
                             @SerializedName("data") val hotComments:MutableList<CommentModel>)
 
-data class HeaderFooterModel(val content: String)
+data class HeaderFooterModel(val content: String,val type : Int) : DetailType {
+    override fun getType(): Constants.MusicPageType {
+        return Constants.MusicPageType.values()[type]
+    }
+}

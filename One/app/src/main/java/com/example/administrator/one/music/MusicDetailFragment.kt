@@ -9,8 +9,8 @@ import com.example.administrator.one.adapter.MusicPageDetailAdapter
 import com.example.administrator.one.common.api.API
 import com.example.administrator.one.common.api.ApiUrl
 import com.example.administrator.one.common.api.BaseObserver
-import com.example.administrator.one.model.DetailType
-import com.example.administrator.one.model.MusicDetailModel
+import com.example.administrator.one.common.api.Constants
+import com.example.administrator.one.model.*
 import com.example.administrator.one.util.DefaultItemDecoration
 import com.trello.rxlifecycle2.android.FragmentEvent
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -63,7 +63,69 @@ class MusicDetailFragment : BaseFragment() {
                         if (data != null){
                             this@MusicDetailFragment.data.add(data)
                             adapter.notifyDataSetChanged()
+                            getRelatedMusicData(musicId)
                         }
+                    }
+                })
+
+    }
+
+    private fun getRelatedMusicData(musicId: String) {
+        API.retrofit?.create(ApiUrl::class.java)
+                ?.getMusicDetailsRelatedMusicsById(musicId)
+                //绑定线程
+                ?.subscribeOn(Schedulers.io())
+                ?.observeOn(AndroidSchedulers.mainThread())
+                //绑定生命周期
+                ?.compose(bindUntilEvent(FragmentEvent.DESTROY))
+                ?.subscribe(object : BaseObserver<MutableList<MusicRelatedModel>>() {
+                    override fun onFailure(code: Int?) {
+                        getMusicCommentData(musicId)
+                    }
+
+                    override fun onSuccess(data: MutableList<MusicRelatedModel>?) {
+                        if (data != null && data.isNotEmpty()){
+                            this@MusicDetailFragment.data.add(MusicRelatedListModel(data))
+                            adapter.notifyDataSetChanged()
+                        }
+                        getMusicCommentData(musicId)
+                    }
+                })
+    }
+
+    private fun getMusicCommentData(musicId: String) {
+        API.retrofit?.create(ApiUrl::class.java)
+                ?.getMusicPraiseAndTimeComments(musicId,"")
+                //绑定线程
+                ?.subscribeOn(Schedulers.io())
+                ?.observeOn(AndroidSchedulers.mainThread())
+                //绑定生命周期
+                ?.compose(bindUntilEvent(FragmentEvent.DESTROY))
+                ?.subscribe(object : BaseObserver<MutableList<CommentModel>>() {
+                    override fun onFailure(code: Int?) {
+                    }
+
+                    override fun onSuccess(data: MutableList<CommentModel>?) {
+                        if (data != null && data.isNotEmpty()){
+                            var flag = false
+                            data.filter { it.getType() == Constants.MusicPageType.MusicPageTypeCommentHot }.forEach {
+                                if (!flag){
+                                this@MusicDetailFragment.data.add(HeaderFooterModel("热门评论列表",Constants.MusicPageType.MusicPageTypeCommentHeader.ordinal))
+                                    flag = true
+                                }
+                                this@MusicDetailFragment.data.add(it)
+                            }
+                            flag = false
+                            data.filter { it.getType() != Constants.MusicPageType.MusicPageTypeCommentHot }.forEach {
+                                if (!flag){
+                                    this@MusicDetailFragment.data.add(HeaderFooterModel("评论列表",Constants.MusicPageType.MusicPageTypeCommentFooter.ordinal))
+                                    flag = true
+                                }
+                                this@MusicDetailFragment.data.add(it)
+                            }
+                            adapter.notifyDataSetChanged()
+                        }
+                        getMusicCommentData(musicId)
                     }
                 })
     }

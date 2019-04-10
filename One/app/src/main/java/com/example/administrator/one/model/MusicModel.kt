@@ -29,7 +29,7 @@ data class MusicDetailModel(@SerializedName("id") val musicId:String,
                             @SerializedName("commentnum") val commentNum:Int,
                             @SerializedName("read_num") val readNum:Int,
                             @SerializedName("sharenum") val shareNum:Int,
-                            val contentType:Constants.MLBMusicDetailsType):DetailType{
+                            val contentType:Constants.MLBMusicDetailsType = Constants.MLBMusicDetailsType.MLBMusicDetailsTypeNone):DetailType{
     override fun getType(): Constants.MusicPageType {
         return Constants.MusicPageType.MusicPageTypeDetail
     }

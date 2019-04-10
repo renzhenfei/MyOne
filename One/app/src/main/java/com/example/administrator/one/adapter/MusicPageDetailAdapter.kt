@@ -37,7 +37,7 @@ class MusicPageDetailAdapter(private val pageDetail: MutableList<DetailType>) : 
     }
 
     override fun getItemCount(): Int {
-        return if (pageDetail.size > 0) 2 + pageDetail.size else 0
+        return pageDetail.size
     }
 
     override fun onBindViewHolder(p0: TypeVH, p1: Int) {
@@ -72,14 +72,14 @@ class MusicPageDetailAdapter(private val pageDetail: MutableList<DetailType>) : 
 
         override fun <T> configData(data: T) {
             detailModel = data as MusicDetailModel
-            ImageLoaderUtil.displayRoundImage(rootView.context, detailModel?.cover!!, rootView.coverImg)
+            ImageLoaderUtil.displayImage(rootView.context, detailModel?.cover!!, rootView.coverImg)
             ImageLoaderUtil.displayRoundImage(rootView.context, detailModel?.author?.webURL!!, rootView.avatar)
             rootView.authorName.text = detailModel?.author?.userName
             rootView.authorDesc.text = detailModel?.author?.desc
             rootView.title.text = detailModel?.title
             rootView.dateTime.text = CommonUtils.formatTime(detailModel?.makeTime, "MMM dd,yyyy")
             rootView.musicControl.isSelected = false
-            showContentWithType(if (detailModel?.contentType == MLBMusicDetailsTypeNone) MLBMusicDetailsTypeStory else detailModel?.contentType!!)
+            showContentWithType(if (detailModel?.contentType == null || detailModel?.contentType == MLBMusicDetailsTypeNone) MLBMusicDetailsTypeStory else detailModel?.contentType!!)
         }
 
         private fun showContentWithType(type: Constants.MLBMusicDetailsType) {
@@ -118,12 +118,12 @@ class MusicPageDetailAdapter(private val pageDetail: MutableList<DetailType>) : 
                 return
             }
             if (type == MLBMusicDetailsTypeStory) {
-                rootView.contentTitle.visibility = View.GONE
-                rootView.userName.visibility = View.GONE
+                rootView.contentTitle.visibility = View.VISIBLE
+                rootView.userName.visibility = View.VISIBLE
                 //title
                 rootView.contentTitle.text = detailModel?.storyTitle
                 //username
-                rootView.userName.text = detailModel?.storyAuthor?.userName
+                rootView.userName.text = "\n${detailModel?.storyAuthor?.userName}\n\n"
                 //content
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     rootView.content.text = Html.fromHtml(contentStr, Html.FROM_HTML_MODE_COMPACT)

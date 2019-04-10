@@ -24,7 +24,7 @@ class MusicFragment : BaseFragment() {
     }
 
     override fun initView(rootView: View) {
-        adapter = BaseFragmentPageAdapter(activity?.supportFragmentManager!!,musicIds)
+        adapter = BaseFragmentPageAdapter(childFragmentManager,musicIds)
         rootView.vp.adapter = adapter
     }
 

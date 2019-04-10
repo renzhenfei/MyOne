@@ -36,10 +36,11 @@
 
                     <ImageView
                         android:id="@+id/coverImg"
+                        android:scaleType="fitXY"
+                        android:adjustViewBounds="true"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp_250"
-                        android:layout_marginTop="20dp"
-                        android:scaleType="centerCrop" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"/>
 
                     <FrameLayout
                         android:layout_width="match_parent"

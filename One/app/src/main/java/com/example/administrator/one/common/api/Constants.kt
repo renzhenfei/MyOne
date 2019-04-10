@@ -9,13 +9,13 @@ object Constants {
     // 获取评论列表
     const val MLBApiGetPraiseComments = "/comment/praise/%@/%@/%@"
     const val MLBApiGetTimeComments = "/comment/time/%@/%@/%@"
-    const val MLBApiGetPraiseAndTimeComments = "/comment/praiseandtime/%@/%@/%@"
+    const val MLBApiGetPraiseAndTimeComments = "comment/praiseandtime/{music}/{musicId}/{lastCommentId}"
     // 搜索
     const val MLBApiSearching = "/search/%@/%@"
     // 作者/音乐人
     const val MLBApiAuthor = "author"
     // 获取相关列表
-    const val MLBApiGetRelateds = "/related/%@/%@"
+    const val MLBApiGetRelateds = "related/{music}/{musicId}"
     //region home
     // 首页图文
     const val MLBApiHomePage = "hp"
