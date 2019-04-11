@@ -24,11 +24,15 @@ import kotlinx.android.synthetic.main.cell_page_related_music.view.*
 class MusicPageDetailAdapter(private val pageDetail: MutableList<DetailType>) : RecyclerView.Adapter<MusicPageDetailAdapter.TypeVH>() {
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): TypeVH {
         val inflater = LayoutInflater.from(p0.context)
-        val vh: TypeVH? = when (getItemViewType(p1)) {
+        val vh: TypeVH? = when (p1) {
             Constants.MusicPageType.MusicPageTypeDetail.ordinal -> DetailVH(inflater.inflate(R.layout.cell_page_detail, p0, false))
             Constants.MusicPageType.MusicPageTypeRelated.ordinal -> RelatedMusicVH(inflater.inflate(R.layout.cell_page_related_music, p0, false))
-            Constants.MusicPageType.MusicPageTypeCommentHot.ordinal, Constants.MusicPageType.MusicPageTypeCommentNormal.ordinal -> CommentVH(inflater.inflate(R.layout.cell_common_comment, p0, false))
-            Constants.MusicPageType.MusicPageTypeCommentHeader.ordinal, Constants.MusicPageType.MusicPageTypeCommentFooter.ordinal -> HeaderFooterVH(inflater.inflate(R.layout.cell_common_header_footer, p0, false))
+            Constants.MusicPageType.MusicPageTypeCommentHot.ordinal, Constants.MusicPageType.MusicPageTypeCommentNormal.ordinal -> {
+                CommentVH(inflater.inflate(R.layout.cell_common_comment, p0, false))
+            }
+            Constants.MusicPageType.MusicPageTypeCommentHeader.ordinal, Constants.MusicPageType.MusicPageTypeCommentFooter.ordinal -> {
+                HeaderFooterVH(inflater.inflate(R.layout.cell_common_header_footer, p0, false))
+            }
             else -> {
                 null
             }
@@ -41,7 +45,7 @@ class MusicPageDetailAdapter(private val pageDetail: MutableList<DetailType>) : 
     }
 
     override fun onBindViewHolder(p0: TypeVH, p1: Int) {
-        when (getItemViewType(p1)) {
+        when (pageDetail[p1].getType().ordinal) {
             Constants.MusicPageType.MusicPageTypeDetail.ordinal -> {
                 (p0 as DetailVH).configData(pageDetail[p1])
             }

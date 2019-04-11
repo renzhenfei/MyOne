@@ -62,7 +62,7 @@ class MusicDetailFragment : BaseFragment() {
                     override fun onSuccess(data: MusicDetailModel?) {
                         if (data != null){
                             this@MusicDetailFragment.data.add(data)
-//                            adapter.notifyDataSetChanged()
+                            adapter.notifyDataSetChanged()
                             getRelatedMusicData(musicId)
                         }
                     }
@@ -86,7 +86,7 @@ class MusicDetailFragment : BaseFragment() {
                     override fun onSuccess(data: MutableList<MusicRelatedModel>?) {
                         if (data != null && data.isNotEmpty()){
                             this@MusicDetailFragment.data.add(MusicRelatedListModel(data))
-//                            adapter.notifyDataSetChanged()
+                            adapter.notifyDataSetChanged()
                         }
                         getMusicCommentData(musicId)
                     }
