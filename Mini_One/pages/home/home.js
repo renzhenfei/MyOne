@@ -5,7 +5,33 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    array: [1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4,],
+    homeData:[
+      {
+        id:1,
+        type:"连载",
+        coverImg:"https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=700101725,4083038006&fm=111&gp=0.jpg",
+        userName:"作者",
+        articleTitle:"标题",
+        date:"2019.4.16"
+      },
+      {
+        id: 2,
+        type: "连载",
+        coverImg: "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=700101725,4083038006&fm=111&gp=0.jpg",
+        userName: "作者",
+        articleTitle: "标题",
+        date: "2019.4.16"
+      },
+      {
+        id: 3,
+        type: "连载",
+        coverImg: "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=700101725,4083038006&fm=111&gp=0.jpg",
+        userName: "作者",
+        articleTitle: "标题",
+        date: "2019.4.16"
+      }
+    ]
   },
 
   /**

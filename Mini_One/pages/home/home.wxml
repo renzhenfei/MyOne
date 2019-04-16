@@ -1,2 +1,19 @@
 <!--pages/home/home.wxml-->
-<text>pages/home/home.wxml</text>
+<view>
+  <view class='container' wx:for="{{homeData}}" wx:key="{{index}}" data-id='{{item.id}}'>
+    <view class='cell'>
+      <text class='type'>{{item.type}}</text>
+      <text class='articleTitle'>{{item.articleTitle}}</text>
+      <text class='authorName'>{{item.userName}}</text>
+      <image class='coverImg' src='{{item.coverImg}}' lazy-load/>
+      <text class='des'>{{content}}</text>
+      <view class='bottomContainer'>
+        <text class='date'>{{date}}</text>
+        <view class='likeShare'>
+          <image class='like' src=''/>
+          <image class='share' src=''/>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

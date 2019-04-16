@@ -1,1 +1,22 @@
 /* pages/home/home.wxss */
+.container {
+  height: 100%;
+  width: 100%;
+  padding: 30px;
+  border-bottom: .5px solid #ccc
+}
+.cell {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.type {
+  width: 100%;
+  text-align: center
+}
+.authorInfo {
+  margin-left: 15px
+}
+.coverImg {
+  width: 100%;
+}
