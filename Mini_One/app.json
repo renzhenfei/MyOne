@@ -1,12 +1,51 @@
 {
-  "pages":[
+  "pages": [
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/home/home",
+    "pages/read/read",
+    "pages/music/music",
+    "pages/movie/movie"
   ],
-  "window":{
-    "backgroundTextStyle":"light",
+  "window": {
+    "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "WeChat",
-    "navigationBarTextStyle":"black"
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "list": [
+      { 
+      "pagePath": "pages/home/home",
+      "text": "首页",
+      "iconPath":"pages/images/tab_home_normal.png",
+      "selectedIconPath":"pages/images/tab_home_selected.png",
+      "selectedColor":"#ff6495ed",
+      "color":"#ff444444"
+    },
+    {
+      "pagePath": "pages/read/read",
+      "text": "阅读",
+      "iconPath": "pages/images/tab_read_normal.png",
+      "selectedIconPath": "pages/images/tab_read_selected.png",
+      "selectedColor": "#ff6495ed",
+      "color": "#ff444444"
+    },
+    {
+      "pagePath": "pages/music/music",
+      "text": "音乐",
+      "iconPath": "pages/images/tab_music_normal.png",
+      "selectedIconPath": "pages/images/tab_music_selected.png",
+      "selectedColor": "#ff6495ed",
+      "color": "#ff444444"
+    },
+    {
+      "pagePath": "pages/movie/movie",
+      "text": "电影",
+      "iconPath": "pages/images/tab_movie_normal.png",
+      "selectedIconPath": "pages/images/tab_movie_selected.png",
+      "selectedColor": "#ff6495ed",
+      "color": "#ff444444"
+    }
+    ]
   }
 }

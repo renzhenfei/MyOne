@@ -15,6 +15,11 @@ Page({
       url: '../logs/logs'
     })
   },
+  login:function(){
+    wx.switchTab({
+      url: '/pages/home/home',
+    })
+  },
   onLoad: function () {
     if (app.globalData.userInfo) {
       this.setData({
